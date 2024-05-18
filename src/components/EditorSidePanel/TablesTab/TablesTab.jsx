@@ -25,39 +25,41 @@ export default function TablesTab() {
       {tables.length === 0 ? (
         <Empty title={t("no_tables")} text={t("no_tables_text")} />
       ) : (
-        <Collapse
-          activeKey={
-            selectedElement.open && selectedElement.element === ObjectType.TABLE
-              ? `${selectedElement.id}`
-              : ""
-          }
-          keepDOM
-          lazyRender
-          onChange={(k) =>
-            setSelectedElement((prev) => ({
-              ...prev,
-              open: true,
-              id: parseInt(k),
-              element: ObjectType.TABLE,
-            }))
-          }
-          accordion
-        >
-          {tables.map((t) => (
-            <div id={`scroll_table_${t.id}`} key={t.id}>
-              <Collapse.Panel
-                header={
-                  <div className="overflow-hidden text-ellipsis whitespace-nowrap">
-                    {t.name}
-                  </div>
-                }
-                itemKey={`${t.id}`}
-              >
-                <TableInfo data={t} />
-              </Collapse.Panel>
-            </div>
-          ))}
-        </Collapse>
+          <Collapse
+            className="collapse-reset"
+            activeKey={
+              selectedElement.open && selectedElement.element === ObjectType.TABLE
+                ? `${selectedElement.id}`
+                : ""
+            }
+            keepDOM
+            lazyRender
+            onChange={(k) =>
+              setSelectedElement((prev) => ({
+                ...prev,
+                open: true,
+                id: parseInt(k),
+                element: ObjectType.TABLE,
+              }))
+            }
+            accordion
+          >
+            {tables.map((t) => (
+              <div id={`scroll_table_${t.id}`} key={t.id}>
+                <Collapse.Panel
+                  header={
+                    <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+                      {t.name}
+                    </div>
+                  }
+                  itemKey={`${t.id}`}
+                >
+                  <TableInfo data={t} />
+                </Collapse.Panel>
+              </div>
+            ))}
+          </Collapse>
+
       )}
     </>
   );

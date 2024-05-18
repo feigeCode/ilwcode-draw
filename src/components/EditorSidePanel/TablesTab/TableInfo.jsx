@@ -14,6 +14,7 @@ import ColorPalette from "../../ColorPicker";
 import TableField from "./TableField";
 import IndexDetails from "./IndexDetails";
 import { useTranslation } from "react-i18next";
+import FieldDetails from "./FieldDetails";
 
 export default function TableInfo({ data }) {
   const { t } = useTranslation();
@@ -22,10 +23,6 @@ export default function TableInfo({ data }) {
     useTables();
   const { setUndoStack, setRedoStack } = useUndoRedo();
   const [editField, setEditField] = useState({});
-  const [drag, setDrag] = useState({
-    draggingElementIndex: null,
-    draggingOverIndexList: [],
-  });
 
   return (
     <div>
@@ -59,85 +56,58 @@ export default function TableInfo({ data }) {
           }}
         />
       </div>
-      {data.fields.map((f, j) => (
-        <div
-          key={"field_" + j}
-          className={`cursor-pointer ${drag.draggingOverIndexList.includes(j) ? "opacity-25" : ""}`}
-          draggable
-          onDragStart={() => {
-            setDrag((prev) => ({ ...prev, draggingElementIndex: j }));
-          }}
-          onDragLeave={() => {
-            setDrag((prev) => ({
-              ...prev,
-              draggingOverIndexList: prev.draggingOverIndexList.filter(
-                (index) => index !== j,
-              ),
-            }));
-          }}
-          onDragOver={(e) => {
-            e.preventDefault();
-            if (drag.draggingElementIndex != null) {
-              if (j !== drag.draggingElementIndex) {
-                setDrag((prev) => {
-                  if (prev.draggingOverIndexList.includes(j)) {
-                    return prev;
-                  }
+      <Collapse
+        lazyRender
+        accordion
+        keepDOM
+      >
+        {data.fields.map((f, j) => (
+          <div
+            key={"field_" + j}
+            className="cursor-pointer">
+            <Collapse.Panel header={<TableField
+              data={f}
+              tid={data.id}
+              index={j}
+              hasUp={j > 0}
+              hasDown={j < data.fields.length - 1}
+              updateFieldIndex={(index) => {
+                const a = data.fields[index];
+                const b = data.fields[j];
 
-                  return {
-                    ...prev,
-                    draggingOverIndexList: prev.draggingOverIndexList.concat(j),
-                  };
-                });
-              }
+                updateField(data.id, index, { ...b, id: index });
+                updateField(data.id, j, { ...a, id: j });
 
-              return;
-            }
-          }}
-          onDrop={(e) => {
-            e.preventDefault();
-            const index = drag.draggingElementIndex;
-            setDrag({ draggingElementIndex: null, draggingOverIndexList: [] });
-            if (index == null || index === j) {
-              return;
-            }
-
-            const a = data.fields[index];
-            const b = data.fields[j];
-
-            updateField(data.id, index, { ...b, id: index });
-            updateField(data.id, j, { ...a, id: j });
-
-            setRelationships((prev) =>
-              prev.map((e) => {
-                if (e.startTableId === data.id) {
-                  if (e.startFieldId === index) {
-                    return { ...e, startFieldId: j };
-                  }
-                  if (e.startFieldId === j) {
-                    return { ...e, startFieldId: index };
-                  }
-                }
-                if (e.endTableId === data.id) {
-                  if (e.endFieldId === index) {
-                    return { ...e, endFieldId: j };
-                  }
-                  if (e.endFieldId === j) {
-                    return { ...e, endFieldId: index };
-                  }
-                }
-                return e;
-              }),
-            );
-          }}
-          onDragEnd={(e) => {
-            e.preventDefault();
-            setDrag({ draggingElementIndex: null, draggingOverIndexList: [] });
-          }}
-        >
-          <TableField data={f} tid={data.id} index={j} />
-        </div>
-      ))}
+                setRelationships((prev) =>
+                  prev.map((e) => {
+                    if (e.startTableId === data.id) {
+                      if (e.startFieldId === index) {
+                        return { ...e, startFieldId: j };
+                      }
+                      if (e.startFieldId === j) {
+                        return { ...e, startFieldId: index };
+                      }
+                    }
+                    if (e.endTableId === data.id) {
+                      if (e.endFieldId === index) {
+                        return { ...e, endFieldId: j };
+                      }
+                      if (e.endFieldId === j) {
+                        return { ...e, endFieldId: index };
+                      }
+                    }
+                    return e;
+                  }),
+                );
+              }}
+            />} itemKey={`key-${j}`}>
+              <div className="px-1 w-[240px] popover-theme">
+                <FieldDetails data={f} index={j} tid={data.id} />
+              </div>
+            </Collapse.Panel>
+          </div>
+          ))}
+      </Collapse>
       {data.indices.length > 0 && (
         <Card
           bodyStyle={{ padding: "4px" }}

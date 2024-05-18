@@ -129,3 +129,21 @@ export const SIDESHEET = {
   TODO: 1,
   TIMELINE: 2,
 };
+
+
+export const DATA_TYPE_LIST = [
+  {label: '整数', value: 'INTEGER'},
+  {label: '长整数', value: 'LONG'},
+  {label: '小数', value: 'DECIMAL'},
+  {label: '文本', value: 'TEXT'},
+  {label: '多行文本', value: 'MULTI_TEXT'},
+  {label: '富文本', value: 'RICH_TEXT'},
+  {label: '图片', value: 'IMAGE'},
+  {label: '文件', value: 'FILE'},
+  {label: '日期', value: 'DATE'},
+  {label: '时间', value: 'TIME'},
+  {label: '日期时间', value: 'DATETIME'},
+  {label: '布尔', value: 'BOOLEAN'},
+  {label: '枚举', value: 'ENUM'},
+  {label: '实体', value: 'ENTITY'}
+]

@@ -22,6 +22,145 @@ export default function FieldDetails({ data, tid, index }) {
 
   return (
     <div>
+      <div className="flex gap-3 items-center">
+        <div className="flex justify-between items-center gap-1 my-3">
+          <div className="font-medium">{t("primary")}</div>
+          <Checkbox
+            value="primary"
+            checked={data.primary}
+            onChange={(checkedValues) => {
+              setUndoStack((prev) => [
+                ...prev,
+                {
+                  action: Action.EDIT,
+                  element: ObjectType.TABLE,
+                  component: "field",
+                  tid: tid,
+                  fid: index,
+                  undo: {
+                    [checkedValues.target.value]: !checkedValues.target.checked,
+                  },
+                  redo: {
+                    [checkedValues.target.value]: checkedValues.target.checked,
+                  },
+                  message: t("edit_table", {
+                    tableName: tables[tid].name,
+                    extra: "[field]",
+                  }),
+                },
+              ]);
+              setRedoStack([]);
+              updateField(tid, index, { primary: !data.primary });
+              setRedoStack([]);
+              updateField(tid, index, {
+                increment: !data.increment,
+                check: data.increment ? data.check : "",
+              });
+            }}
+          />
+        </div>
+        <div className="flex justify-between items-center gap-1 my-3">
+          <div className="font-medium">{t("not_null")}</div>
+          <Checkbox
+            value="notNull"
+            checked={data.notNull}
+            onChange={(checkedValues) => {
+              setUndoStack((prev) => [
+                ...prev,
+                {
+                  action: Action.EDIT,
+                  element: ObjectType.TABLE,
+                  component: "field",
+                  tid: tid,
+                  fid: index,
+                  undo: {
+                    [checkedValues.target.value]: !checkedValues.target.checked,
+                  },
+                  redo: {
+                    [checkedValues.target.value]: checkedValues.target.checked,
+                  },
+                  message: t("edit_table", {
+                    tableName: tables[tid].name,
+                    extra: "[field]",
+                  }),
+                },
+              ]);
+              setRedoStack([]);
+              updateField(tid, index, { notNull: !data.notNull });
+            }}
+          />
+        </div>
+        <div className="flex justify-between items-center gap-1 my-3">
+          <div className="font-medium">{t("autoincrement")}</div>
+          <Checkbox
+            value="increment"
+            checked={data.increment}
+            disabled={
+              !(
+                data.type === "INT" ||
+                data.type === "BIGINT" ||
+                data.type === "SMALLINT"
+              )
+            }
+            onChange={(checkedValues) => {
+              setUndoStack((prev) => [
+                ...prev,
+                {
+                  action: Action.EDIT,
+                  element: ObjectType.TABLE,
+                  component: "field",
+                  tid: tid,
+                  fid: index,
+                  undo: {
+                    [checkedValues.target.value]: !checkedValues.target.checked,
+                  },
+                  redo: {
+                    [checkedValues.target.value]: checkedValues.target.checked,
+                  },
+                  message: t("edit_table", {
+                    tableName: tables[tid].name,
+                    extra: "[field]",
+                  }),
+                },
+              ]);
+              setRedoStack([]);
+              updateField(tid, index, {
+                increment: !data.increment,
+                check: data.increment ? data.check : "",
+              });
+            }}
+          />
+        </div>
+        <div className="flex justify-between items-center gap-1 my-3">
+          <div className="font-medium">{t("unique")}</div>
+          <Checkbox
+            value="unique"
+            checked={data.unique}
+            onChange={(checkedValues) => {
+              setUndoStack((prev) => [
+                ...prev,
+                {
+                  action: Action.EDIT,
+                  element: ObjectType.TABLE,
+                  component: "field",
+                  tid: tid,
+                  fid: index,
+                  undo: {
+                    [checkedValues.target.value]: !checkedValues.target.checked,
+                  },
+                  redo: {
+                    [checkedValues.target.value]: checkedValues.target.checked,
+                  },
+                },
+              ]);
+              setRedoStack([]);
+              updateField(tid, index, {
+                [checkedValues.target.value]: checkedValues.target.checked,
+              });
+            }}
+          />
+        </div>
+      </div>
       <div className="font-semibold">{t("default_value")}</div>
       <Input
         className="my-2"
@@ -202,76 +341,6 @@ export default function FieldDetails({ data, tid, index }) {
           <div className="text-xs mt-1">{t("this_will_appear_as_is")}</div>
         </>
       )}
-      <div className="flex justify-between items-center my-3">
-        <div className="font-medium">{t("unique")}</div>
-        <Checkbox
-          value="unique"
-          checked={data.unique}
-          onChange={(checkedValues) => {
-            setUndoStack((prev) => [
-              ...prev,
-              {
-                action: Action.EDIT,
-                element: ObjectType.TABLE,
-                component: "field",
-                tid: tid,
-                fid: index,
-                undo: {
-                  [checkedValues.target.value]: !checkedValues.target.checked,
-                },
-                redo: {
-                  [checkedValues.target.value]: checkedValues.target.checked,
-                },
-              },
-            ]);
-            setRedoStack([]);
-            updateField(tid, index, {
-              [checkedValues.target.value]: checkedValues.target.checked,
-            });
-          }}
-        />
-      </div>
-      <div className="flex justify-between items-center my-3">
-        <div className="font-medium">{t("autoincrement")}</div>
-        <Checkbox
-          value="increment"
-          checked={data.increment}
-          disabled={
-            !(
-              data.type === "INT" ||
-              data.type === "BIGINT" ||
-              data.type === "SMALLINT"
-            )
-          }
-          onChange={(checkedValues) => {
-            setUndoStack((prev) => [
-              ...prev,
-              {
-                action: Action.EDIT,
-                element: ObjectType.TABLE,
-                component: "field",
-                tid: tid,
-                fid: index,
-                undo: {
-                  [checkedValues.target.value]: !checkedValues.target.checked,
-                },
-                redo: {
-                  [checkedValues.target.value]: checkedValues.target.checked,
-                },
-                message: t("edit_table", {
-                  tableName: tables[tid].name,
-                  extra: "[field]",
-                }),
-              },
-            ]);
-            setRedoStack([]);
-            updateField(tid, index, {
-              increment: !data.increment,
-              check: data.increment ? data.check : "",
-            });
-          }}
-        />
-      </div>
       <div className="font-semibold">{t("comment")}</div>
       <TextArea
         className="my-2"

@@ -207,6 +207,8 @@ const zh = {
     edit_relationship: "{{extra}} 编辑关系 {{refName}}",
     delete_relationship: "删除关系 {{refName}}",
     not_found: "未找到",
+    move_up: "上移",
+    move_down: "下移"
   },
 };
 
