@@ -109,3 +109,8 @@
 .collapse-reset .semi-collapse-content {
   padding: 4px 2px 8px 2px!important;
 }
+
+.collapse-reset .semi-collapse-header {
+  margin: 2px;
+  padding: 2px;
+}

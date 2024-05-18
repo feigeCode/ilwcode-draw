@@ -16,7 +16,7 @@ export default function TableField({ data, tid, index, hasDown, hasUp, updateFie
   const [editField, setEditField] = useState({});
 
   return (
-    <div onClick={e => e.stopPropagation()}>
+    <div className="flex-1" onClick={e => e.stopPropagation()}>
       <Row gutter={4} className="my-2" >
         { hasUp &&
           <Col span={hasDown && hasUp ? 2 : 4} className="hover-1  pt-[11px] hover:text-blue-600">

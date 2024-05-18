@@ -185,6 +185,7 @@ export default function Table(props) {
           {tableData.fields.map((e, i) => {
             return settings.showFieldSummary ? (
               <Popover
+                trigger={'focus'}
                 key={i}
                 content={
                   <div className="popover-theme">
