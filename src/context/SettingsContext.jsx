@@ -8,6 +8,7 @@ export default function SettingsContextProvider({ children }) {
     strictMode: false,
     showFieldSummary: true,
     showGrid: true,
+    variant: 'cross',
     mode: "light",
     autosave: true,
     panning: true,

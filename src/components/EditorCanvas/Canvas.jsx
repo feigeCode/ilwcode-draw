@@ -22,6 +22,8 @@ import {
 } from "../../hooks";
 import { useTranslation } from "react-i18next";
 import { diagram } from "../../data/heroDiagram";
+import CrossPattern from "./CrossPattern.jsx";
+import DotsPattern from "./DotsPattern.jsx";
 
 export default function Canvas() {
   const { t } = useTranslation();
@@ -426,23 +428,11 @@ export default function Canvas() {
           {settings.showGrid && (
             <>
               <defs>
-                <pattern
-                  id="pattern-circles"
-                  x="0"
-                  y="0"
-                  width="24"
-                  height="24"
-                  patternUnits="userSpaceOnUse"
-                  patternContentUnits="userSpaceOnUse"
-                >
-                  <circle
-                    id="pattern-circle"
-                    cx="4"
-                    cy="4"
-                    r="0.85"
-                    fill="rgb(99, 152, 191)"
-                  ></circle>
-                </pattern>
+                {
+                  settings.variant === 'cross' ?
+                    <CrossPattern/> :
+                    <DotsPattern />
+                }
               </defs>
               <rect
                 x="0"
