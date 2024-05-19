@@ -5,9 +5,9 @@ import {
   TextArea,
   Button,
   Card,
-  Popover,
+  Popover, Col, Row,
 } from "@douyinfe/semi-ui";
-import { IconDeleteStroked } from "@douyinfe/semi-icons";
+import { IconDeleteStroked, IconRefresh } from "@douyinfe/semi-icons";
 import { useTables, useUndoRedo } from "../../../hooks";
 import { Action, ObjectType, defaultBlue } from "../../../data/constants";
 import ColorPalette from "../../ColorPicker";
@@ -27,34 +27,42 @@ export default function TableInfo({ data }) {
   return (
     <div>
       <div className="flex items-center mb-2.5">
-        <div className="text-md font-semibold break-keep">{t("name")}: </div>
-        <Input
-          value={data.name}
-          validateStatus={data.name === "" ? "error" : "default"}
-          placeholder={t("name")}
-          className="ms-2"
-          onChange={(value) => updateTable(data.id, { name: value })}
-          onFocus={(e) => setEditField({ name: e.target.value })}
-          onBlur={(e) => {
-            if (e.target.value === editField.name) return;
-            setUndoStack((prev) => [
-              ...prev,
-              {
-                action: Action.EDIT,
-                element: ObjectType.TABLE,
-                component: "self",
-                tid: data.id,
-                undo: editField,
-                redo: { name: e.target.value },
-                message: t("edit_table", {
-                  tableName: e.target.value,
-                  extra: "[name]",
-                }),
-              },
-            ]);
-            setRedoStack([]);
-          }}
-        />
+        <Row gutter={4}>
+          <Col span={3} className="pt-[6px]">
+            <div className="text-md font-semibold break-keep">{t("name")}:</div>
+          </Col>
+          <Col span={15}>
+            <Input
+              value={data.name}
+              validateStatus={data.name === "" ? "error" : "default"}
+              placeholder={t("name")}
+              onChange={(value) => updateTable(data.id, { name: value })}
+              onFocus={(e) => setEditField({ name: e.target.value })}
+              onBlur={(e) => {
+                if (e.target.value === editField.name) return;
+                setUndoStack((prev) => [
+                  ...prev,
+                  {
+                    action: Action.EDIT,
+                    element: ObjectType.TABLE,
+                    component: "self",
+                    tid: data.id,
+                    undo: editField,
+                    redo: { name: e.target.value },
+                    message: t("edit_table", {
+                      tableName: e.target.value,
+                      extra: "[name]",
+                    }),
+                  },
+                ]);
+                setRedoStack([]);
+              }}
+            />
+          </Col>
+          <Col span={6}>
+            <Button title={t('换一个')} icon={<IconRefresh />}></Button>
+          </Col>
+        </Row>
       </div>
       <Collapse
         lazyRender

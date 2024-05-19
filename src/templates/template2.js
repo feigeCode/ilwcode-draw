@@ -3,11 +3,13 @@ export const template2 = {
     {
       id: 0,
       name: "employees",
+      displayName: "员工",
       x: 365,
       y: 20,
       fields: [
         {
           name: "id",
+          displayName: "唯一标识",
           type: "INT",
           default: "",
           check: "",
@@ -20,6 +22,7 @@ export const template2 = {
         },
         {
           name: "first_name",
+          displayName: "显示名称1",
           type: "VARCHAR",
           default: "",
           check: "",
@@ -33,6 +36,7 @@ export const template2 = {
         },
         {
           name: "last_name",
+          displayName: "显示名称2",
           type: "VARCHAR",
           default: "",
           check: "",
@@ -46,6 +50,7 @@ export const template2 = {
         },
         {
           name: "dob",
+          displayName: "显示名称3",
           type: "DATE",
           default: "",
           check: "",
@@ -60,6 +65,7 @@ export const template2 = {
         },
         {
           name: "dep_id",
+          displayName: "显示名称4",
           type: "INT",
           default: "",
           check: "",
@@ -72,6 +78,7 @@ export const template2 = {
         },
         {
           name: "pos_id",
+          displayName: "显示名称5",
           type: "INT",
           default: "",
           check: "",
@@ -90,11 +97,13 @@ export const template2 = {
     {
       id: 1,
       name: "department",
+      displayName: "部门",
       x: 41,
       y: 59,
       fields: [
         {
           name: "id",
+          displayName: "唯一标识",
           type: "INT",
           default: "",
           check: "",
@@ -107,6 +116,7 @@ export const template2 = {
         },
         {
           name: "name",
+          displayName: "显示名称1",
           type: "VARCHAR",
           default: "",
           check: "",
@@ -126,11 +136,13 @@ export const template2 = {
     {
       id: 2,
       name: "positions",
+      displayName: "职位",
       x: 37,
       y: 284,
       fields: [
         {
           name: "id",
+          displayName: "唯一标识",
           type: "INT",
           default: "",
           check: "",
@@ -143,6 +155,7 @@ export const template2 = {
         },
         {
           name: "name",
+          displayName: "显示名称1",
           type: "VARCHAR",
           default: "",
           check: "",
@@ -156,6 +169,7 @@ export const template2 = {
         },
         {
           name: "salary",
+          displayName: "显示名称2",
           type: "DOUBLE",
           default: "",
           check: "",
@@ -175,11 +189,13 @@ export const template2 = {
     {
       id: 3,
       name: "projects",
+      displayName: "项目",
       x: 668,
       y: 28,
       fields: [
         {
           name: "id",
+          displayName: "唯一标识",
           type: "INT",
           default: "",
           check: "",
@@ -192,6 +208,7 @@ export const template2 = {
         },
         {
           name: "name",
+          displayName: "显示名称1",
           type: "VARCHAR",
           default: "",
           check: "",
@@ -205,6 +222,7 @@ export const template2 = {
         },
         {
           name: "description",
+          displayName: "显示名称2",
           type: "TEXT",
           default: "",
           check: "",
@@ -218,6 +236,7 @@ export const template2 = {
         },
         {
           name: "start_date",
+          displayName: "显示名称3",
           type: "DATE",
           default: "",
           check: "",
@@ -232,6 +251,7 @@ export const template2 = {
         },
         {
           name: "end_date",
+          displayName: "显示名称4",
           type: "DATE",
           default: "",
           check: "",
@@ -252,11 +272,13 @@ export const template2 = {
     {
       id: 4,
       name: "project_assignment",
+      displayName: "项目协助",
       x: 684,
       y: 295,
       fields: [
         {
           name: "id",
+          displayName: "唯一标识",
           type: "INT",
           default: "",
           check: "",
@@ -269,6 +291,7 @@ export const template2 = {
         },
         {
           name: "project_id",
+          displayName: "显示名称2",
           type: "INT",
           default: "",
           check: "",
@@ -281,6 +304,7 @@ export const template2 = {
         },
         {
           name: "employee_id",
+          displayName: "显示名称3",
           type: "INT",
           default: "",
           check: "",

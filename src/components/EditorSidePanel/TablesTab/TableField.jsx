@@ -42,13 +42,13 @@ export default function TableField({ data, tid, index, hasDown, hasUp, updateFie
         }
         <Col span={10}>
           <Input
-            value={data.name}
-            validateStatus={data.name === "" ? "error" : "default"}
-            placeholder="Name"
-            onChange={(value) => updateField(tid, index, { name: value })}
-            onFocus={(e) => setEditField({ name: e.target.value })}
+            value={data.displayName}
+            validateStatus={data.displayName === "" ? "error" : "default"}
+            placeholder="Display Name"
+            onChange={(value) => updateField(tid, index, { displayName: value })}
+            onFocus={(e) => setEditField({ displayName: e.target.value })}
             onBlur={(e) => {
-              if (e.target.value === editField.name) return;
+              if (e.target.value === editField.displayName) return;
               setUndoStack((prev) => [
                 ...prev,
                 {
@@ -58,9 +58,9 @@ export default function TableField({ data, tid, index, hasDown, hasUp, updateFie
                   tid: tid,
                   fid: index,
                   undo: editField,
-                  redo: { name: e.target.value },
+                  redo: { displayName: e.target.value },
                   message: t("edit_table", {
-                    tableName: tables[tid].name,
+                    tableName: tables[tid].displayName,
                     extra: "[field]",
                   }),
                 },

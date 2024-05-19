@@ -93,7 +93,7 @@ export default function Table(props) {
             }`}
           >
             <div className=" px-3 overflow-hidden text-ellipsis whitespace-nowrap">
-              {tableData.name}
+              {tableData.displayName}
             </div>
             <div className="hidden group-hover:block">
               <div className="flex justify-end items-center mx-2">
@@ -185,7 +185,6 @@ export default function Table(props) {
           {tableData.fields.map((e, i) => {
             return settings.showFieldSummary ? (
               <Popover
-                trigger={'focus'}
                 key={i}
                 content={
                   <div className="popover-theme">
@@ -309,7 +308,7 @@ export default function Table(props) {
             }}
           />
           <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-            {fieldData.name}
+            {fieldData.displayName}
           </span>
         </div>
         <div className="text-zinc-400">
