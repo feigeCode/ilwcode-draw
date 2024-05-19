@@ -3,8 +3,8 @@ import useTransform from "../hooks/useTransform";
 import { Action, ObjectType, defaultNoteTheme } from "../data/constants";
 import useUndoRedo from "../hooks/useUndoRedo";
 import useSelect from "../hooks/useSelect";
-import { Toast } from "@douyinfe/semi-ui";
 import { useTranslation } from "react-i18next";
+import { message } from "antd";
 
 export const NotesContext = createContext(null);
 
@@ -14,6 +14,7 @@ export default function NotesContextProvider({ children }) {
   const { transform } = useTransform();
   const { setUndoStack, setRedoStack } = useUndoRedo();
   const { selectedElement, setSelectedElement } = useSelect();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const addNote = (data, addToHistory = true) => {
     if (data) {
@@ -51,7 +52,7 @@ export default function NotesContextProvider({ children }) {
 
   const deleteNote = (id, addToHistory = true) => {
     if (addToHistory) {
-      Toast.success(t("note_deleted"));
+      messageApi.success(t("note_deleted"));
       setUndoStack((prev) => [
         ...prev,
         {

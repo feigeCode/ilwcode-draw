@@ -3,8 +3,8 @@ import { Action, ObjectType, defaultBlue } from "../data/constants";
 import useTransform from "../hooks/useTransform";
 import useUndoRedo from "../hooks/useUndoRedo";
 import useSelect from "../hooks/useSelect";
-import { Toast } from "@douyinfe/semi-ui";
 import { useTranslation } from "react-i18next";
+import { message } from "antd";
 
 export const TablesContext = createContext(null);
 
@@ -15,6 +15,7 @@ export default function TablesContextProvider({ children }) {
   const { transform } = useTransform();
   const { setUndoStack, setRedoStack } = useUndoRedo();
   const { selectedElement, setSelectedElement } = useSelect();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const addTable = (data, addToHistory = true) => {
     if (data) {
@@ -67,7 +68,7 @@ export default function TablesContextProvider({ children }) {
 
   const deleteTable = (id, addToHistory = true) => {
     if (addToHistory) {
-      Toast.success(t("table_deleted"));
+      messageApi.success(t("table_deleted"));
       setUndoStack((prev) => [
         ...prev,
         {
@@ -228,22 +229,25 @@ export default function TablesContextProvider({ children }) {
   };
 
   return (
-    <TablesContext.Provider
-      value={{
-        tables,
-        setTables,
-        addTable,
-        updateTable,
-        updateField,
-        deleteField,
-        deleteTable,
-        relationships,
-        setRelationships,
-        addRelationship,
-        deleteRelationship,
-      }}
-    >
-      {children}
-    </TablesContext.Provider>
+    <>
+      {contextHolder}
+      <TablesContext.Provider
+        value={{
+          tables,
+          setTables,
+          addTable,
+          updateTable,
+          updateField,
+          deleteField,
+          deleteTable,
+          relationships,
+          setRelationships,
+          addRelationship,
+          deleteRelationship,
+        }}
+      >
+        {children}
+      </TablesContext.Provider>
+    </>
   );
 }

@@ -1,8 +1,8 @@
 import { createContext, useState } from "react";
 import { Action, ObjectType } from "../data/constants";
 import useUndoRedo from "../hooks/useUndoRedo";
-import { Toast } from "@douyinfe/semi-ui";
 import { useTranslation } from "react-i18next";
+import { message } from "antd";
 
 export const TypesContext = createContext(null);
 
@@ -10,6 +10,7 @@ export default function TypesContextProvider({ children }) {
   const { t } = useTranslation();
   const [types, setTypes] = useState([]);
   const { setUndoStack, setRedoStack } = useUndoRedo();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const addType = (data, addToHistory = true) => {
     if (data) {
@@ -43,7 +44,7 @@ export default function TypesContextProvider({ children }) {
 
   const deleteType = (id, addToHistory = true) => {
     if (addToHistory) {
-      Toast.success(t("type_deleted"));
+      messageApi.success(t("type_deleted"));
       setUndoStack((prev) => [
         ...prev,
         {
@@ -68,16 +69,19 @@ export default function TypesContextProvider({ children }) {
   };
 
   return (
-    <TypesContext.Provider
-      value={{
-        types,
-        setTypes,
-        addType,
-        updateType,
-        deleteType,
-      }}
-    >
-      {children}
-    </TypesContext.Provider>
+   <>
+     {contextHolder}
+     <TypesContext.Provider
+       value={{
+         types,
+         setTypes,
+         addType,
+         updateType,
+         deleteType,
+       }}
+     >
+       {children}
+     </TypesContext.Provider>
+   </>
   );
 }

@@ -5,7 +5,6 @@ import {
   Constraint,
   ObjectType,
 } from "../../data/constants";
-import { Toast } from "@douyinfe/semi-ui";
 import Table from "./Table";
 import Area from "./Area";
 import Relationship from "./Relationship";
@@ -24,6 +23,7 @@ import { useTranslation } from "react-i18next";
 import { diagram } from "../../data/heroDiagram";
 import CrossPattern from "./CrossPattern.jsx";
 import DotsPattern from "./DotsPattern.jsx";
+import { message } from "antd";
 
 export default function Canvas() {
   const { t } = useTranslation();
@@ -74,6 +74,8 @@ export default function Canvas() {
     mouseY: 0,
   });
   const [cursor, setCursor] = useState("default");
+  const [messageApi, contextHolder] = message.useMessage();
+
 
   const canvas = useRef(null);
 
@@ -364,7 +366,7 @@ export default function Canvas() {
       tables[linkingLine.startTableId].fields[linkingLine.startFieldId].type !==
       tables[hoveredTable.tableId].fields[hoveredTable.field].type
     ) {
-      Toast.info(t("connot_connect"));
+      messageApi.info(t("connot_connect"));
       return;
     }
     if (
@@ -414,6 +416,7 @@ export default function Canvas() {
 
   return (
     <div className="flex-grow h-full" id="canvas">
+      {contextHolder}
       <div ref={canvas} className="w-full h-full">
         <svg
           onMouseMove={handleMouseMove}

@@ -3,8 +3,8 @@ import { Action, ObjectType, defaultBlue } from "../data/constants";
 import useUndoRedo from "../hooks/useUndoRedo";
 import useTransform from "../hooks/useTransform";
 import useSelect from "../hooks/useSelect";
-import { Toast } from "@douyinfe/semi-ui";
 import { useTranslation } from "react-i18next";
+import { message } from "antd";
 
 export const AreasContext = createContext(null);
 
@@ -14,6 +14,7 @@ export default function AreasContextProvider({ children }) {
   const { transform } = useTransform();
   const { selectedElement, setSelectedElement } = useSelect();
   const { setUndoStack, setRedoStack } = useUndoRedo();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const addArea = (data, addToHistory = true) => {
     if (data) {
@@ -51,7 +52,7 @@ export default function AreasContextProvider({ children }) {
 
   const deleteArea = (id, addToHistory = true) => {
     if (addToHistory) {
-      Toast.success(t("area_deleted"));
+      messageApi.success(t("area_deleted"));
       setUndoStack((prev) => [
         ...prev,
         {
@@ -91,10 +92,13 @@ export default function AreasContextProvider({ children }) {
   };
 
   return (
-    <AreasContext.Provider
-      value={{ areas, setAreas, updateArea, addArea, deleteArea }}
-    >
-      {children}
-    </AreasContext.Provider>
+   <>
+     {contextHolder}
+     <AreasContext.Provider
+       value={{ areas, setAreas, updateArea, addArea, deleteArea }}
+     >
+       {children}
+     </AreasContext.Provider>
+   </>
   );
 }
