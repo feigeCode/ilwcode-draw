@@ -8,7 +8,7 @@ import {
   Tooltip,
   Spin,
   Popconfirm, message,
-  Dropdown,
+  Dropdown, ConfigProvider,
 } from "antd";
 import { toPng, toJpeg, toSvg } from "html-to-image";
 import { saveAs } from "file-saver";
@@ -59,6 +59,7 @@ import {
   UndoOutlined,
   UpOutlined,
 } from "@ant-design/icons";
+import { getAlgorithm } from "../../main.jsx";
 
 export default function ControlPanel({
                                        diagramId,
@@ -100,7 +101,6 @@ export default function ControlPanel({
   const { transform, setTransform } = useTransform();
   const { t } = useTranslation();
   const navigate = useNavigate();
-
   const invertLayout = (component) =>
     setLayout((prev) => ({ ...prev, [component]: !prev[component] }));
 
@@ -1077,6 +1077,11 @@ export default function ControlPanel({
               }
               localStorage.setItem("theme", "light");
               setSettings((prev) => ({ ...prev, mode: "light" }));
+              ConfigProvider.config({
+                theme: {
+                  algorithm: getAlgorithm()
+                }
+              })
             },
           },
           {
@@ -1087,6 +1092,11 @@ export default function ControlPanel({
               }
               localStorage.setItem("theme", "dark");
               setSettings((prev) => ({ ...prev, mode: "dark" }));
+              ConfigProvider.config({
+                theme: {
+                  algorithm: getAlgorithm()
+                }
+              })
             },
           },
         ],

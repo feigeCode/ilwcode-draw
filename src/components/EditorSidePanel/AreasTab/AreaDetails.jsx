@@ -55,7 +55,7 @@ export default function AreaInfo({ data, i }) {
       </Col>
       <Col span={3}>
         <Popover
-          content={
+          title={
             <div className="popover-theme">
               <ColorPalette
                 currentColor={data.color}
@@ -85,7 +85,7 @@ export default function AreaInfo({ data, i }) {
             </div>
           }
           trigger="click"
-          position="bottomLeft"
+          placement="bottomLeft"
           showArrow
         >
           <div
@@ -97,7 +97,8 @@ export default function AreaInfo({ data, i }) {
       <Col span={3}>
         <Button
           icon={<DeleteOutlined />}
-          type="danger"
+          type="default"
+          danger
           onClick={() => deleteArea(i, true)}
         />
       </Col>

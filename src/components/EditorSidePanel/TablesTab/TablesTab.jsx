@@ -51,7 +51,6 @@ export default function TablesTab() {
                   <div  id={`scroll_table_${table.id}`} key={table.id} onClick={(e) => e.stopPropagation()}>
                     <Input
                       value={table.displayName}
-                      validateStatus={table.displayName === "" ? "error" : "default"}
                       placeholder={t("name")}
                       onChange={(value) => updateTable(table.id, { displayName: value })}
                       onFocus={(e) => setEditField({ displayName: e.target.value })}

@@ -217,7 +217,7 @@ export default function Table(props) {
                     </p>
                   </div>
                 }
-                position="right"
+                placement="right"
                 showArrow
               >
                 {field(e, i)}

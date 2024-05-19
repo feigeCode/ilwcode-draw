@@ -17,32 +17,9 @@ export default function TableField({ data, tid, index, hasDown, hasUp, updateFie
   return (
     <div className="flex-1" onClick={e => e.stopPropagation()}>
       <Row gutter={4} className="my-2" >
-        { hasUp &&
-          <Col span={hasDown && hasUp ? 2 : 4} className="hover-1  pt-[11px] hover:text-blue-600">
-            <a
-              title={t("move_up")}
-              onClick={() => {
-                  updateFieldIndex(index - 1)
-              }}>
-              <ArrowUpOutlined />
-            </a>
-          </Col>
-        }
-        { hasDown &&
-          <Col span={hasDown && hasUp ? 2 : 4} className="hover-1 pt-[11px] hover:text-blue-600">
-            <a
-              title={t("move_down")}
-              onClick={() => {
-                updateFieldIndex(index + 1)
-            }}>
-              <ArrowDownOutlined />
-            </a>
-          </Col>
-        }
         <Col span={10}>
           <Input
             value={data.displayName}
-            validateStatus={data.displayName === "" ? "error" : "default"}
             placeholder="Display Name"
             onChange={(value) => updateField(tid, index, { displayName: value })}
             onFocus={(e) => setEditField({ displayName: e.target.value })}
@@ -81,9 +58,7 @@ export default function TableField({ data, tid, index, hasDown, hasUp, updateFie
                 value: type.name.toUpperCase(),
               })),
             ]}
-            filter
             value={data.type}
-            validateStatus={data.type === "" ? "error" : "default"}
             placeholder="Type"
             onChange={(value) => {
               if (value === data.type) return;
@@ -151,6 +126,28 @@ export default function TableField({ data, tid, index, hasDown, hasUp, updateFie
             }}
           />
         </Col>
+        { hasUp &&
+          <Col span={hasDown && hasUp ? 2 : 4} className="hover-1  pt-[11px] hover:text-blue-600">
+            <a
+              title={t("move_up")}
+              onClick={() => {
+                updateFieldIndex(index - 1)
+              }}>
+              <ArrowUpOutlined />
+            </a>
+          </Col>
+        }
+        { hasDown &&
+          <Col span={hasDown && hasUp ? 2 : 4} className="hover-1 pt-[11px] hover:text-blue-600">
+            <a
+              title={t("move_down")}
+              onClick={() => {
+                updateFieldIndex(index + 1)
+              }}>
+              <ArrowDownOutlined  />
+            </a>
+          </Col>
+        }
       </Row>
     </div>
   );

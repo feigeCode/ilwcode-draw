@@ -25,7 +25,6 @@ export default function TypeInfo({ index, data }) {
         <div className="text-md font-semibold break-keep">{t("name")}: </div>
         <Input
           value={data.name}
-          validateStatus={data.name === "" ? "error" : "default"}
           placeholder={t("name")}
           className="ms-2"
           onChange={(value) => updateType(index, { name: value })}
@@ -57,7 +56,6 @@ export default function TypeInfo({ index, data }) {
       <Card
         styles={{body: { padding: "4px" }}}
         style={{ marginTop: "12px", marginBottom: "12px" }}
-        headerLine={false}
       >
         <Collapse items={[{
           id: '1',

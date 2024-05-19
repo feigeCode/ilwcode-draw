@@ -25,7 +25,6 @@ export default function TypeField({ data, tid, fid }) {
       <Col span={10}>
         <Input
           value={data.name}
-          validateStatus={data.name === "" ? "error" : "default"}
           placeholder={t("name")}
           onChange={(value) =>
             updateType(tid, {
@@ -76,7 +75,6 @@ export default function TypeField({ data, tid, fid }) {
           ]}
           filter
           value={data.type}
-          validateStatus={data.type === "" ? "error" : "default"}
           placeholder={t("type")}
           onChange={(value) => {
             if (value === data.type) return;
@@ -226,11 +224,6 @@ export default function TypeField({ data, tid, fid }) {
                   <Input
                     className="my-2 w-full"
                     placeholder={t("set_precision")}
-                    validateStatus={
-                      /^\(\d+,\s*\d+\)$|^$/.test(data.size)
-                        ? "default"
-                        : "error"
-                    }
                     value={data.size}
                     onChange={(value) =>
                       updateType(tid, {

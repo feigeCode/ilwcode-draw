@@ -33,7 +33,6 @@ export default function TableInfo({ data }) {
           <Col span={15}>
             <Input
               value={data.name}
-              validateStatus={data.name === "" ? "error" : "default"}
               placeholder={t("name")}
               onChange={(value) => updateTable(data.id, { name: value })}
               onFocus={(e) => setEditField({ name: e.target.value })}
@@ -118,7 +117,6 @@ export default function TableInfo({ data }) {
         <Card
           styles={{ body: { padding: "4px" } }}
           style={{ marginTop: "12px", marginBottom: "12px" }}
-          headerLine={false}
         >
           <Collapse
             activeKey={indexActiveKey}
@@ -147,7 +145,6 @@ export default function TableInfo({ data }) {
       <Card
         styles={{ body: { padding: "4px" } }}
         style={{ marginTop: "12px", marginBottom: "12px" }}
-        headerLine={false}
       >
         <Collapse items={[{
           id: "1",

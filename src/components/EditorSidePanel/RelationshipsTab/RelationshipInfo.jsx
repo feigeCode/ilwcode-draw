@@ -146,7 +146,7 @@ export default function RelationshipInfo({ data }) {
         </div>
         <div className="ms-1">
           <Popover
-            content={
+            title={
               <div className="p-2 popover-theme">
                 <Table
                   columns={columns}
@@ -187,7 +187,7 @@ export default function RelationshipInfo({ data }) {
       </div>
       <div className="font-semibold my-1">{t("cardinality")}:</div>
       <Select
-        optionList={Object.values(Cardinality).map((v) => ({
+        options={Object.values(Cardinality).map((v) => ({
           label: v,
           value: v,
         }))}
@@ -199,7 +199,7 @@ export default function RelationshipInfo({ data }) {
         <Col span={12}>
           <div className="font-semibold">{t("on_update")}: </div>
           <Select
-            optionList={Object.values(Constraint).map((v) => ({
+            options={Object.values(Constraint).map((v) => ({
               label: v,
               value: v,
             }))}
@@ -211,7 +211,7 @@ export default function RelationshipInfo({ data }) {
         <Col span={12}>
           <div className="font-semibold">{t("on_delete")}: </div>
           <Select
-            optionList={Object.values(Constraint).map((v) => ({
+            options={Object.values(Constraint).map((v) => ({
               label: v,
               value: v,
             }))}
@@ -224,7 +224,8 @@ export default function RelationshipInfo({ data }) {
       <Button
         icon={<DeleteOutlined />}
         block
-        type="danger"
+        type="default"
+        danger
         onClick={() => deleteRelationship(data.id)}
       >
         {t("delete")}

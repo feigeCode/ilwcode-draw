@@ -81,7 +81,7 @@ export default function NoteInfo({ data, nid }) {
         />
         <div className="ms-2">
           <Popover
-            content={
+            title={
               <div className="popover-theme">
                 <div className="font-medium mb-1">{t("theme")}</div>
                 <hr />
@@ -121,7 +121,7 @@ export default function NoteInfo({ data, nid }) {
               </div>
             }
             trigger="click"
-            position="rightTop"
+            placement="rightTop"
             showArrow
           >
             <div
@@ -131,7 +131,8 @@ export default function NoteInfo({ data, nid }) {
           </Popover>
           <Button
             icon={<DeleteOutlined />}
-            type="danger"
+            type="default"
+            danger
             onClick={() => deleteNote(nid, true)}
           />
         </div>

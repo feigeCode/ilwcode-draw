@@ -166,7 +166,6 @@ export default function FieldDetails({ data, tid, index }) {
         <Col span={15}>
           <Input
             value={data.name}
-            validateStatus={data.name === "" ? "error" : "default"}
             placeholder="Name"
             onChange={(value) => updateField(tid, index, { name: value })}
             onFocus={(e) => setEditField({ name: e.target.value })}
@@ -335,11 +334,6 @@ export default function FieldDetails({ data, tid, index }) {
               <Input
                 className="my-2 w-full"
                 placeholder={t("set_precision")}
-                validateStatus={
-                  !data.size || /^\d+,\s*\d+$|^$/.test(data.size)
-                    ? "default"
-                    : "error"
-                }
                 value={data.size}
                 onChange={(value) => updateField(tid, index, { size: value })}
                 onFocus={(e) => setEditField({ size: e.target.value })}
@@ -372,7 +366,7 @@ export default function FieldDetails({ data, tid, index }) {
         <>
           <Row gutter={4}>
             <Col span={5} className="pt-[14px]">
-              <Tooltip content={<div className="text-xs mt-1">{t("this_will_appear_as_is")}</div>}>
+              <Tooltip title={<div className="text-xs mt-1">{t("this_will_appear_as_is")}</div>}>
                 <Badge count={<InfoCircleOutlined />} >
                   <div className="font-semibold">{t("check")}</div>
                 </Badge>
@@ -421,7 +415,6 @@ export default function FieldDetails({ data, tid, index }) {
             className="my-2"
             placeholder={t("comment")}
             value={data.comment}
-            autosize
             rows={2}
             onChange={(value) => updateField(tid, index, { comment: value })}
             onFocus={(e) => setEditField({ comment: e.target.value })}

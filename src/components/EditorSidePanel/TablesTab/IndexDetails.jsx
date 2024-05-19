@@ -15,7 +15,6 @@ export default function IndexDetails({ data, fields, iid, tid }) {
       <Select
         placeholder={t("select_fields")}
         mode={'multiple'}
-        validateStatus={data.fields.length === 0 ? "error" : "default"}
         options={fields}
         className="w-full"
         value={data.fields}
