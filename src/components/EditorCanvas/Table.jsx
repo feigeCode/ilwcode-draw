@@ -230,7 +230,6 @@ export default function Table(props) {
       </foreignObject>
       <Drawer
         title={t("edit")}
-        size="small"
         open={
           selectedElement.element === ObjectType.TABLE &&
           selectedElement.id === tableData.id &&

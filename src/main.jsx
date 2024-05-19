@@ -19,7 +19,7 @@ export function getAlgorithm() {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <ConfigProvider locale={zh_CN} theme={{algorithm:  getAlgorithm()}}>
+  <ConfigProvider locale={zh_CN} theme={{algorithm:  getAlgorithm(), cssVar: true}}>
     <App />
     <Analytics />
   </ConfigProvider>,

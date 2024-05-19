@@ -120,8 +120,8 @@ export default function Area({ data, onMouseDown, setResize, setInitCoords }) {
                   onClickOutSide={onClickOutSide}
                   stopPropagation
                   content={<EditPopoverContent data={data} />}
-                  trigger="custom"
-                  position="rightTop"
+                  trigger="click"
+                  placement="rightTop"
                   showArrow
                 >
                   <Button

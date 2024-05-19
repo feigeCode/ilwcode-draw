@@ -201,7 +201,7 @@ export default function Note({ data, onMouseDown }) {
                           }}
                         />
                         <Popover
-                          content={
+                          title={
                             <div className="popover-theme">
                               <div className="font-medium mb-1">
                                 {t("theme")}
