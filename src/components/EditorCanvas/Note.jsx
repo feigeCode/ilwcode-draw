@@ -6,12 +6,8 @@ import {
   State,
   noteThemes,
 } from "../../data/constants";
-import { Input, Button, Popover } from "@douyinfe/semi-ui";
-import {
-  IconEdit,
-  IconDeleteStroked,
-  IconCheckboxTick,
-} from "@douyinfe/semi-icons";
+import { Input, Button, Popover } from "antd";
+import { DeleteOutlined, EditOutlined ,CheckOutlined } from "@ant-design/icons";
 import {
   useLayout,
   useUndoRedo,
@@ -150,7 +146,7 @@ export default function Note({ data, onMouseDown }) {
                 !layout.sidebar)) && (
               <div>
                 <Popover
-                  visible={
+                  open={
                     selectedElement.element === ObjectType.NOTE &&
                     selectedElement.id === data.id &&
                     selectedElement.open &&
@@ -237,11 +233,11 @@ export default function Note({ data, onMouseDown }) {
                                     }}
                                   >
                                     {data.color === c ? (
-                                      <IconCheckboxTick
+                                      <CheckOutlined
                                         style={{ color: "white" }}
                                       />
                                     ) : (
-                                      <IconCheckboxTick style={{ color: c }} />
+                                      <CheckOutlined style={{ color: c }} />
                                     )}
                                   </button>
                                 ))}
@@ -259,7 +255,7 @@ export default function Note({ data, onMouseDown }) {
                       </div>
                       <div className="flex">
                         <Button
-                          icon={<IconDeleteStroked />}
+                          icon={<DeleteOutlined />}
                           type="danger"
                           block
                           onClick={() => deleteNote(data.id, true)}
@@ -274,7 +270,7 @@ export default function Note({ data, onMouseDown }) {
                   showArrow
                 >
                   <Button
-                    icon={<IconEdit />}
+                    icon={<EditOutlined />}
                     size="small"
                     theme="solid"
                     style={{

@@ -1,5 +1,6 @@
-import { Collapse, Button, Popover } from "@douyinfe/semi-ui";
-import { IconPlus, IconInfoCircle } from "@douyinfe/semi-icons";
+import { Collapse, Button, Popover } from "antd";
+import { InfoCircleOutlined, PlusOutlined } from "@ant-design/icons";
+
 import { useSelect, useTypes } from "../../../hooks";
 import { ObjectType } from "../../../data/constants";
 import Searchbar from "./SearchBar";
@@ -17,7 +18,7 @@ export default function TypesTab() {
       <div className="flex gap-2">
         <Searchbar />
         <div>
-          <Button icon={<IconPlus />} block onClick={() => addType()}>
+          <Button icon={<PlusOutlined />} block onClick={() => addType()}>
             {t("add_type")}
           </Button>
         </div>
@@ -34,7 +35,7 @@ export default function TypesTab() {
           showArrow
           position="rightTop"
         >
-          <Button theme="borderless" icon={<IconInfoCircle />} />
+          <Button theme="borderless" icon={<InfoCircleOutlined />} />
         </Popover>
       </div>
       {types.length <= 0 ? (
@@ -46,8 +47,6 @@ export default function TypesTab() {
               ? `${selectedElement.id}`
               : ""
           }
-          keepDOM
-          lazyRender
           onChange={(id) =>
             setSelectedElement((prev) => ({
               ...prev,
@@ -57,10 +56,14 @@ export default function TypesTab() {
             }))
           }
           accordion
+          items={types.map((t, i) => {
+            return {
+              id: i,
+              label: <div id={`scroll_type_${index}`} className="overflow-hidden text-ellipsis whitespace-nowrap">{t.name}</div>,
+              children: <TypeInfo data={t} key={i} index={i} />,
+            }
+          })}
         >
-          {types.map((t, i) => (
-            <TypeInfo data={t} key={i} index={i} />
-          ))}
         </Collapse>
       )}
     </>

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button, Collapse, TextArea, Popover, Input } from "@douyinfe/semi-ui";
-import { IconDeleteStroked, IconCheckboxTick } from "@douyinfe/semi-icons";
+import { Button, Popover, Input } from "antd";
+import { DeleteOutlined , CheckOutlined } from "@ant-design/icons";
 import { noteThemes, Action, ObjectType } from "../../../data/constants";
 import { useNotes, useUndoRedo } from "../../../hooks";
 import { useTranslation } from "react-i18next";
@@ -12,15 +12,7 @@ export default function NoteInfo({ data, nid }) {
   const { t } = useTranslation();
 
   return (
-    <Collapse.Panel
-      header={
-        <div className="overflow-hidden text-ellipsis whitespace-nowrap">
-          {data.title}
-        </div>
-      }
-      itemKey={`${data.id}`}
-      id={`scroll_note_${data.id}`}
-    >
+    <>
       <div className="flex items-center mb-2">
         <div className="font-semibold me-2 break-keep">{t("title")}:</div>
         <Input
@@ -49,7 +41,7 @@ export default function NoteInfo({ data, nid }) {
         />
       </div>
       <div className="flex justify-between align-top">
-        <TextArea
+        <Input.TextArea
           placeholder={t("content")}
           value={data.content}
           autosize
@@ -119,9 +111,9 @@ export default function NoteInfo({ data, nid }) {
                       }}
                     >
                       {data.color === c ? (
-                        <IconCheckboxTick style={{ color: "white" }} />
+                        <CheckOutlined style={{ color: "white" }} />
                       ) : (
-                        <IconCheckboxTick style={{ color: c }} />
+                        <CheckOutlined style={{ color: c }} />
                       )}
                     </button>
                   ))}
@@ -138,12 +130,12 @@ export default function NoteInfo({ data, nid }) {
             />
           </Popover>
           <Button
-            icon={<IconDeleteStroked />}
+            icon={<DeleteOutlined />}
             type="danger"
             onClick={() => deleteNote(nid, true)}
           />
         </div>
       </div>
-    </Collapse.Panel>
+    </>
   );
 }

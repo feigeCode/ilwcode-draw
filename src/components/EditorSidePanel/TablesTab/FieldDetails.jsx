@@ -1,17 +1,15 @@
 import { useState } from "react";
 import {
   Input,
-  TextArea,
   Button,
-  TagInput,
   InputNumber,
   Checkbox, Row, Col, Tooltip, Badge,
-} from "@douyinfe/semi-ui";
+} from "antd";
 import { Action, ObjectType } from "../../../data/constants";
-import { IconDeleteStroked, IconInfoCircle, IconRefresh } from "@douyinfe/semi-icons";
 import { hasCheck, hasPrecision, isSized } from "../../../utils/toSQL";
 import { useTables, useUndoRedo } from "../../../hooks";
 import { useTranslation } from "react-i18next";
+import { DeleteOutlined, InfoCircleOutlined, ReloadOutlined } from "@ant-design/icons";
 
 export default function FieldDetails({ data, tid, index }) {
   const { t } = useTranslation();
@@ -195,7 +193,7 @@ export default function FieldDetails({ data, tid, index }) {
           />
         </Col>
         <Col span={4}>
-          <Button title={t('换一个')} icon={<IconRefresh />}></Button>
+          <Button title={t('换一个')} icon={<ReloadOutlined />}></Button>
         </Col>
       </Row>
       <Row gutter={4}>
@@ -249,41 +247,42 @@ export default function FieldDetails({ data, tid, index }) {
               </div>
             </Col>
             <Col span={19}>
-              <TagInput
-                separator={[",", ", ", " ,"]}
-                value={data.values}
-                validateStatus={
-                  !data.values || data.values.length === 0 ? "error" : "default"
-                }
-                addOnBlur
-                className="my-2"
-                placeholder={t("use_for_batch_input")}
-                onChange={(v) => updateField(tid, index, { values: v })}
-                onFocus={() => setEditField({ values: data.values })}
-                onBlur={() => {
-                  if (
-                    JSON.stringify(editField.values) === JSON.stringify(data.values)
-                  )
-                    return;
-                  setUndoStack((prev) => [
-                    ...prev,
-                    {
-                      action: Action.EDIT,
-                      element: ObjectType.TABLE,
-                      component: "field",
-                      tid: tid,
-                      fid: index,
-                      undo: editField,
-                      redo: { values: data.values },
-                      message: t("edit_table", {
-                        tableName: tables[tid].name,
-                        extra: "[field]",
-                      }),
-                    },
-                  ]);
-                  setRedoStack([]);
-                }}
-              />
+              {/*<TagInput*/}
+              {/*  separator={[",", ", ", " ,"]}*/}
+              {/*  value={data.values}*/}
+              {/*  validateStatus={*/}
+              {/*    !data.values || data.values.length === 0 ? "error" : "default"*/}
+              {/*  }*/}
+              {/*  addOnBlur*/}
+              {/*  className="my-2"*/}
+              {/*  placeholder={t("use_for_batch_input")}*/}
+              {/*  onChange={(v) => updateField(tid, index, { values: v })}*/}
+              {/*  onFocus={() => setEditField({ values: data.values })}*/}
+              {/*  onBlur={() => {*/}
+              {/*    if (*/}
+              {/*      JSON.stringify(editField.values) === JSON.stringify(data.values)*/}
+              {/*    )*/}
+              {/*      return;*/}
+              {/*    setUndoStack((prev) => [*/}
+              {/*      ...prev,*/}
+              {/*      {*/}
+              {/*        action: Action.EDIT,*/}
+              {/*        element: ObjectType.TABLE,*/}
+              {/*        component: "field",*/}
+              {/*        tid: tid,*/}
+              {/*        fid: index,*/}
+              {/*        undo: editField,*/}
+              {/*        redo: { values: data.values },*/}
+              {/*        message: t("edit_table", {*/}
+              {/*          tableName: tables[tid].name,*/}
+              {/*          extra: "[field]",*/}
+              {/*        }),*/}
+              {/*      },*/}
+              {/*    ]);*/}
+              {/*    setRedoStack([]);*/}
+              {/*  }}*/}
+              {/*/>*/}
+            {/*  TODO TagInput*/}
             </Col>
           </Row>
         </>
@@ -374,7 +373,7 @@ export default function FieldDetails({ data, tid, index }) {
           <Row gutter={4}>
             <Col span={5} className="pt-[14px]">
               <Tooltip content={<div className="text-xs mt-1">{t("this_will_appear_as_is")}</div>}>
-                <Badge count={<IconInfoCircle />} >
+                <Badge count={<InfoCircleOutlined />} >
                   <div className="font-semibold">{t("check")}</div>
                 </Badge>
               </Tooltip>
@@ -418,7 +417,7 @@ export default function FieldDetails({ data, tid, index }) {
           <div className="font-semibold">{t("comment")}</div>
         </Col>
         <Col span={19}>
-          <TextArea
+          <Input.TextArea
             className="my-2"
             placeholder={t("comment")}
             value={data.comment}
@@ -451,8 +450,9 @@ export default function FieldDetails({ data, tid, index }) {
       </Row>
 
       <Button
-        icon={<IconDeleteStroked />}
-        type="danger"
+        icon={<DeleteOutlined />}
+        type="default"
+        danger
         block
         onClick={() => deleteField(data, tid)}
       >

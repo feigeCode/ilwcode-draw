@@ -1,26 +1,15 @@
 import { useState } from "react";
-import {
-  IconCaretdown,
-  IconChevronRight,
-  IconChevronUp,
-  IconChevronDown,
-  IconSaveStroked,
-  IconUndo,
-  IconRedo,
-  IconEdit,
-} from "@douyinfe/semi-icons";
 import { Link, useNavigate } from "react-router-dom";
 import icon from "../../assets/icon_dark_64.png";
 import {
   Button,
   Divider,
-  Dropdown,
   InputNumber,
   Tooltip,
   Spin,
-  Toast,
-  Popconfirm,
-} from "@douyinfe/semi-ui";
+  Popconfirm, message,
+  Dropdown,
+} from "antd";
 import { toPng, toJpeg, toSvg } from "html-to-image";
 import { saveAs } from "file-saver";
 import {
@@ -62,14 +51,22 @@ import LayoutDropdown from "./LayoutDropdown";
 import Sidesheet from "./SideSheet/Sidesheet";
 import Modal from "./Modal/Modal";
 import { useTranslation } from "react-i18next";
+import {
+  CaretDownOutlined,
+  CaretRightOutlined,
+  DownOutlined, EditOutlined, RedoOutlined,
+  SaveOutlined,
+  UndoOutlined,
+  UpOutlined,
+} from "@ant-design/icons";
 
 export default function ControlPanel({
-  diagramId,
-  setDiagramId,
-  title,
-  setTitle,
-  lastSaved,
-}) {
+                                       diagramId,
+                                       setDiagramId,
+                                       title,
+                                       setTitle,
+                                       lastSaved,
+                                     }) {
   const [modal, setModal] = useState(MODAL.NONE);
   const [sidesheet, setSidesheet] = useState(SIDESHEET.NONE);
   const [prevTitle, setPrevTitle] = useState(title);
@@ -79,6 +76,7 @@ export default function ControlPanel({
     filename: `${title}_${new Date().toISOString()}`,
     extension: "",
   });
+  const [messageApi, contextHolder] = message.useMessage();
   const { saveState, setSaveState } = useSaveState();
   const { layout, setLayout } = useLayout();
   const { settings, setSettings } = useSettings();
@@ -209,9 +207,9 @@ export default function ControlPanel({
             indices: tables[a.tid].indices.map((index) =>
               index.id === a.iid
                 ? {
-                    ...index,
-                    ...a.undo,
-                  }
+                  ...index,
+                  ...a.undo,
+                }
                 : index,
             ),
           });
@@ -398,9 +396,9 @@ export default function ControlPanel({
             indices: tables[a.tid].indices.map((index) =>
               index.id === a.iid
                 ? {
-                    ...index,
-                    ...a.redo,
-                  }
+                  ...index,
+                  ...a.redo,
+                }
                 : index,
             ),
           });
@@ -469,15 +467,15 @@ export default function ControlPanel({
     }));
   };
   const copyAsImage = () => {
-    toPng(document.getElementById("canvas")).then(function (dataUrl) {
+    toPng(document.getElementById("canvas")).then(function(dataUrl) {
       const blob = dataURItoBlob(dataUrl);
       navigator.clipboard
         .write([new ClipboardItem({ "image/png": blob })])
         .then(() => {
-          Toast.success(t("copied_to_clipboard"));
+          messageApi.success(t("copied_to_clipboard"));
         })
         .catch(() => {
-          Toast.error(t("oops_smth_went_wrong"));
+          messageApi.error(t("oops_smth_went_wrong"));
         });
     });
   };
@@ -604,17 +602,17 @@ export default function ControlPanel({
       case ObjectType.TABLE:
         navigator.clipboard
           .writeText(JSON.stringify({ ...tables[selectedElement.id] }))
-          .catch(() => Toast.error(t("oops_smth_went_wrong")));
+          .catch(() => messageApi.error(t("oops_smth_went_wrong")));
         break;
       case ObjectType.NOTE:
         navigator.clipboard
           .writeText(JSON.stringify({ ...notes[selectedElement.id] }))
-          .catch(() => Toast.error(t("oops_smth_went_wrong")));
+          .catch(() => messageApi.error(t("oops_smth_went_wrong")));
         break;
       case ObjectType.AREA:
         navigator.clipboard
           .writeText(JSON.stringify({ ...areas[selectedElement.id] }))
-          .catch(() => Toast.error(t("oops_smth_went_wrong")));
+          .catch(() => messageApi.error(t("oops_smth_went_wrong")));
         break;
       default:
         break;
@@ -697,7 +695,7 @@ export default function ControlPanel({
               custom: 1,
             })
             .then(() => {
-              Toast.success(t("template_saved"));
+              messageApi.success(t("template_saved"));
             });
         },
       },
@@ -726,7 +724,7 @@ export default function ControlPanel({
               setUndoStack([]);
               setRedoStack([]);
             })
-            .catch(() => Toast.error(t("oops_smth_went_wrong")));
+            .catch(() => messageApi.error(t("oops_smth_went_wrong")));
         },
       },
       import_diagram: {
@@ -740,7 +738,7 @@ export default function ControlPanel({
         children: [
           {
             PNG: () => {
-              toPng(document.getElementById("canvas")).then(function (dataUrl) {
+              toPng(document.getElementById("canvas")).then(function(dataUrl) {
                 setExportData((prev) => ({
                   ...prev,
                   data: dataUrl,
@@ -753,7 +751,7 @@ export default function ControlPanel({
           {
             JPEG: () => {
               toJpeg(document.getElementById("canvas"), { quality: 0.95 }).then(
-                function (dataUrl) {
+                function(dataUrl) {
                   setExportData((prev) => ({
                     ...prev,
                     data: dataUrl,
@@ -790,7 +788,7 @@ export default function ControlPanel({
             SVG: () => {
               const filter = (node) => node.tagName !== "i";
               toSvg(document.getElementById("canvas"), { filter: filter }).then(
-                function (dataUrl) {
+                function(dataUrl) {
                   setExportData((prev) => ({
                     ...prev,
                     data: dataUrl,
@@ -804,7 +802,7 @@ export default function ControlPanel({
           {
             PDF: () => {
               const canvas = document.getElementById("canvas");
-              toJpeg(canvas).then(function (dataUrl) {
+              toJpeg(canvas).then(function(dataUrl) {
                 const doc = new jsPDF("l", "px", [
                   canvas.offsetWidth,
                   canvas.offsetHeight,
@@ -844,7 +842,8 @@ export default function ControlPanel({
             },
           },
         ],
-        function: () => {},
+        function: () => {
+        },
       },
       export_source: {
         children: [
@@ -924,7 +923,8 @@ export default function ControlPanel({
             },
           },
         ],
-        function: () => {},
+        function: () => {
+        },
       },
       exit: {
         function: () => {
@@ -1090,7 +1090,8 @@ export default function ControlPanel({
             },
           },
         ],
-        function: () => {},
+        function: () => {
+        },
       },
       zoom_in: {
         function: zoomIn,
@@ -1140,11 +1141,11 @@ export default function ControlPanel({
         function: async () => {
           db.delete()
             .then(() => {
-              Toast.success(t("storage_flushed"));
+              messageApi.success(t("storage_flushed"));
               window.location.reload(false);
             })
             .catch(() => {
-              Toast.error(t("oops_smth_went_wrong"));
+              messageApi.error(t("oops_smth_went_wrong"));
             });
         },
       },
@@ -1198,6 +1199,7 @@ export default function ControlPanel({
 
   return (
     <>
+      {contextHolder}
       {layout.header && header()}
       {layout.toolbar && toolbar()}
       <Modal
@@ -1220,36 +1222,37 @@ export default function ControlPanel({
 
   function toolbar() {
     return (
-      <div className="py-1.5 px-5 flex justify-between items-center rounded-xl my-1 sm:mx-1 xl:mx-6 select-none overflow-hidden toolbar-theme">
+      <div
+        className="py-1.5 px-5 flex justify-between items-center rounded-xl my-1 sm:mx-1 xl:mx-6 select-none overflow-hidden toolbar-theme">
         <div className="flex justify-start items-center">
           <LayoutDropdown />
-          <Divider layout="vertical" margin="8px" />
+          <Divider type="vertical" margin="8px" />
           <Dropdown
-            style={{ width: "240px" }}
-            position="bottomLeft"
-            render={
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={fitWindow}
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <div>{t("fit_window_reset")}</div>
-                  <div className="text-gray-400">Ctrl+Alt+W</div>
-                </Dropdown.Item>
-                <Dropdown.Divider />
-                {[0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0].map((e, i) => (
-                  <Dropdown.Item
+            menu={{
+              items: [
+                {
+                  key: "1",
+                  label: <a
+                    onClick={fitWindow}
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <div>{t("fit_window_reset")}</div>
+                    <div className="text-gray-400">Ctrl+Alt+W</div>
+                  </a>,
+                }, ...[0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0].map((e, i) => ({
+                  key: "" + (i + 2),
+                  label: <a
                     key={i}
                     onClick={() => {
                       setTransform((prev) => ({ ...prev, zoom: e }));
                     }}
                   >
                     {Math.floor(e * 100)}%
-                  </Dropdown.Item>
-                ))}
-                <Dropdown.Divider />
-                <Dropdown.Item>
-                  <InputNumber
+                  </a>,
+                })),
+                {
+                  key: "10",
+                  label: <InputNumber
                     field="zoom"
                     label={t("zoom")}
                     placeholder={t("zoom")}
@@ -1260,10 +1263,12 @@ export default function ControlPanel({
                         zoom: parseFloat(v) * 0.01,
                       }))
                     }
-                  />
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            }
+                  />,
+                },
+              ],
+            }}
+            style={{ width: "240px" }}
+            placement="bottomLeft"
             trigger="click"
           >
             <div className="py-1 px-2 hover-2 rounded flex items-center justify-center">
@@ -1271,11 +1276,11 @@ export default function ControlPanel({
                 {Math.floor(transform.zoom * 100)}%
               </div>
               <div>
-                <IconCaretdown />
+                <CaretDownOutlined />
               </div>
             </div>
           </Dropdown>
-          <Tooltip content={t("zoom_in")} position="bottom">
+          <Tooltip title={t("zoom_in")} placement="bottom">
             <button
               className="py-1 px-2 hover-2 rounded text-lg"
               onClick={() =>
@@ -1285,7 +1290,7 @@ export default function ControlPanel({
               <i className="fa-solid fa-magnifying-glass-plus" />
             </button>
           </Tooltip>
-          <Tooltip content={t("zoom_out")} position="bottom">
+          <Tooltip title={t("zoom_out")} placement="bottom">
             <button
               className="py-1 px-2 hover-2 rounded text-lg"
               onClick={() =>
@@ -1295,31 +1300,28 @@ export default function ControlPanel({
               <i className="fa-solid fa-magnifying-glass-minus" />
             </button>
           </Tooltip>
-          <Divider layout="vertical" margin="8px" />
-          <Tooltip content={t("undo")} position="bottom">
+          <Divider type="vertical" margin="8px" />
+          <Tooltip title={t("undo")} placement="bottom">
             <button
               className="py-1 px-2 hover-2 rounded flex items-center"
               onClick={undo}
             >
-              <IconUndo
-                size="large"
+              <UndoOutlined
                 style={{ color: undoStack.length === 0 ? "#9598a6" : "" }}
               />
             </button>
           </Tooltip>
-          <Tooltip content={t("redo")} position="bottom">
+          <Tooltip title={t("redo")} placement="bottom">
             <button
               className="py-1 px-2 hover-2 rounded flex items-center"
               onClick={redo}
             >
-              <IconRedo
-                size="large"
-                style={{ color: redoStack.length === 0 ? "#9598a6" : "" }}
+              <RedoOutlined style={{ color: redoStack.length === 0 ? "#9598a6" : "" }}
               />
             </button>
           </Tooltip>
-          <Divider layout="vertical" margin="8px" />
-          <Tooltip content={t("add_table")} position="bottom">
+          <Divider type="vertical" margin="8px" />
+          <Tooltip title={t("add_table")} placement="bottom">
             <button
               className="flex items-center py-1 px-2 hover-2 rounded"
               onClick={() => addTable()}
@@ -1327,7 +1329,7 @@ export default function ControlPanel({
               <IconAddTable />
             </button>
           </Tooltip>
-          <Tooltip content={t("add_area")} position="bottom">
+          <Tooltip title={t("add_area")} placement="bottom">
             <button
               className="py-1 px-2 hover-2 rounded flex items-center"
               onClick={() => addArea()}
@@ -1335,7 +1337,7 @@ export default function ControlPanel({
               <IconAddArea />
             </button>
           </Tooltip>
-          <Tooltip content={t("add_note")} position="bottom">
+          <Tooltip title={t("add_note")} placement="bottom">
             <button
               className="py-1 px-2 hover-2 rounded flex items-center"
               onClick={() => addNote()}
@@ -1343,16 +1345,16 @@ export default function ControlPanel({
               <IconAddNote />
             </button>
           </Tooltip>
-          <Divider layout="vertical" margin="8px" />
-          <Tooltip content={t("save")} position="bottom">
+          <Divider type="vertical" margin="8px" />
+          <Tooltip title={t("save")} placement="bottom">
             <button
               className="py-1 px-2 hover-2 rounded flex items-center"
               onClick={save}
             >
-              <IconSaveStroked size="extra-large" />
+              <SaveOutlined />
             </button>
           </Tooltip>
-          <Tooltip content={t("to_do")} position="bottom">
+          <Tooltip title={t("to_do")} placement="bottom">
             <button
               className="py-1 px-2 hover-2 rounded text-xl -mt-0.5"
               onClick={() => setSidesheet(SIDESHEET.TODO)}
@@ -1360,8 +1362,8 @@ export default function ControlPanel({
               <i className="fa-regular fa-calendar-check" />
             </button>
           </Tooltip>
-          <Divider layout="vertical" margin="8px" />
-          <Tooltip content={t("theme")} position="bottom">
+          <Divider type="vertical" margin="8px" />
+          <Tooltip title={t("theme")} placement="bottom">
             <button
               className="py-1 px-2 hover-2 rounded text-xl -mt-0.5"
               onClick={() => {
@@ -1383,7 +1385,7 @@ export default function ControlPanel({
           onClick={() => invertLayout("header")}
           className="flex items-center"
         >
-          {layout.header ? <IconChevronUp /> : <IconChevronDown />}
+          {layout.header ? <UpOutlined /> : <DownOutlined />}
         </button>
       </div>
     );
@@ -1429,70 +1431,72 @@ export default function ControlPanel({
                 {window.name.split(" ")[0] === "t" ? "Templates/" : "Diagrams/"}
                 {title}
               </div>
-              {(showEditName || modal === MODAL.RENAME) && <IconEdit />}
+              {(showEditName || modal === MODAL.RENAME) && <EditOutlined />}
             </div>
             <div className="flex justify-between items-center">
               <div className="flex justify-start text-md select-none me-2">
                 {Object.keys(menu).map((category) => (
                   <Dropdown
                     key={category}
-                    position="bottomLeft"
+                    placement="bottomLeft"
                     style={{ width: "240px" }}
-                    render={
-                      <Dropdown.Menu>
-                        {Object.keys(menu[category]).map((item, index) => {
-                          if (menu[category][item].children) {
-                            return (
-                              <Dropdown
-                                style={{ width: "120px" }}
-                                key={item}
-                                position="rightTop"
-                                render={
-                                  <Dropdown.Menu>
-                                    {menu[category][item].children.map(
-                                      (e, i) => (
-                                        <Dropdown.Item
-                                          key={i}
-                                          onClick={Object.values(e)[0]}
-                                        >
-                                          {t(Object.keys(e)[0])}
-                                        </Dropdown.Item>
-                                      ),
-                                    )}
-                                  </Dropdown.Menu>
-                                }
+                    menu={{
+                      items: Object.keys(menu[category]).map((item, index) => {
+                        if (menu[category][item].children) {
+                          return {
+                            key: "" + index,
+                            label: <Dropdown
+                              style={{ width: "120px" }}
+                              key={item}
+                              placement="rightTop"
+                              menu={{
+                                items: menu[category][item].children.map(
+                                  (e, i) => (
+                                    {
+                                      key: index + "-" + i,
+                                      label: <a
+                                        key={i}
+                                        onClick={Object.values(e)[0]}
+                                      >
+                                        {t(Object.keys(e)[0])}
+                                      </a>,
+                                    }
+                                  ),
+                                ),
+                              }}
+                            >
+                              <a
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                }}
+                                onClick={menu[category][item].function}
                               >
-                                <Dropdown.Item
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                  }}
-                                  onClick={menu[category][item].function}
-                                >
-                                  {t(item)}
-                                  <IconChevronRight />
-                                </Dropdown.Item>
-                              </Dropdown>
-                            );
-                          }
-                          if (menu[category][item].warning) {
-                            return (
-                              <Popconfirm
-                                key={index}
-                                title={menu[category][item].warning.title}
-                                content={menu[category][item].warning.message}
-                                onConfirm={menu[category][item].function}
-                                position="right"
-                                okText={t("confirm")}
-                                cancelText={t("cancel")}
-                              >
-                                <Dropdown.Item>{t(item)}</Dropdown.Item>
-                              </Popconfirm>
-                            );
-                          }
-                          return (
-                            <Dropdown.Item
+                                {t(item)}
+                                <CaretRightOutlined />
+                              </a>
+                            </Dropdown>,
+                          };
+                        } else if (menu[category][item].warning) {
+                          return {
+                            key: "" + index,
+                            label: <Popconfirm
+                              key={index}
+                              title={menu[category][item].warning.title}
+                              description={menu[category][item].warning.message}
+                              onConfirm={menu[category][item].function}
+                              placement="right"
+                              okText={t("confirm")}
+                              cancelText={t("cancel")}
+                            >
+                              <a>{t(item)}</a>
+                            </Popconfirm>,
+                          };
+                        } else {
+                          return {
+                            key: "" + index,
+                            label: <a
                               key={index}
                               onClick={menu[category][item].function}
                               style={
@@ -1515,11 +1519,11 @@ export default function ControlPanel({
                                     menu[category][item].state}
                                 </div>
                               </div>
-                            </Dropdown.Item>
-                          );
-                        })}
-                      </Dropdown.Menu>
-                    }
+                            </a>,
+                          };
+                        }
+                      }),
+                    }}
                   >
                     <div className="px-3 py-1 hover-2 rounded">
                       {t(category)}

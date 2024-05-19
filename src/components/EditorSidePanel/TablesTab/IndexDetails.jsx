@@ -1,21 +1,22 @@
 import { Action, ObjectType } from "../../../data/constants";
-import { Input, Button, Popover, Checkbox, Select } from "@douyinfe/semi-ui";
-import { IconMore, IconDeleteStroked } from "@douyinfe/semi-icons";
+import { Input, Button, Popover, Checkbox, Select } from "antd";
 import { useTables, useUndoRedo } from "../../../hooks";
 import { useTranslation } from "react-i18next";
+import { DeleteOutlined, MoreOutlined } from "@ant-design/icons";
 
 export default function IndexDetails({ data, fields, iid, tid }) {
   const { t } = useTranslation();
   const { tables, updateTable } = useTables();
   const { setUndoStack, setRedoStack } = useUndoRedo();
 
+  // TODO Select validateStatus
   return (
     <div className="flex justify-between items-center mb-2">
       <Select
         placeholder={t("select_fields")}
-        multiple
+        mode={'multiple'}
         validateStatus={data.fields.length === 0 ? "error" : "default"}
-        optionList={fields}
+        options={fields}
         className="w-full"
         value={data.fields}
         onChange={(value) => {
@@ -104,8 +105,9 @@ export default function IndexDetails({ data, fields, iid, tid }) {
               ></Checkbox>
             </div>
             <Button
-              icon={<IconDeleteStroked />}
-              type="danger"
+              icon={DeleteOutlined}
+              type="default"
+              danger
               block
               onClick={() => {
                 setUndoStack((prev) => [
@@ -142,8 +144,8 @@ export default function IndexDetails({ data, fields, iid, tid }) {
         showArrow
       >
         <Button
-          icon={<IconMore />}
-          type="tertiary"
+          icon={<MoreOutlined />}
+          type="dashed"
           style={{ marginLeft: "12px" }}
         />
       </Popover>

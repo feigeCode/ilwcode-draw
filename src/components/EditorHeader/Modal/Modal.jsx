@@ -2,9 +2,8 @@ import {
   Spin,
   Input,
   Image,
-  Toast,
-  Modal as SemiUIModal,
-} from "@douyinfe/semi-ui";
+  Modal as AntdModal, message,
+} from "antd";
 import { MODAL, STATUS } from "../../../data/constants";
 import { useState } from "react";
 import { db } from "../../../data/db";
@@ -72,7 +71,7 @@ export default function Modal({
   const [selectedTemplateId, setSelectedTemplateId] = useState(-1);
   const [selectedDiagramId, setSelectedDiagramId] = useState(0);
   const [saveAsTitle, setSaveAsTitle] = useState(title);
-
+  const [messageApi, contextHolder] = message.useMessage();
   const overwriteDiagram = () => {
     setTables(importData.tables);
     setRelationships(importData.relationships);
@@ -103,11 +102,11 @@ export default function Modal({
           setRedoStack([]);
           window.name = `d ${diagram.id}`;
         } else {
-          Toast.error("Oops! Something went wrong.");
+          messageApi.error("Oops! Something went wrong.");
         }
       })
       .catch(() => {
-        Toast.error("Oops! Couldn't load diagram.");
+        messageApi.error("Oops! Couldn't load diagram.");
       });
   };
 
@@ -183,7 +182,7 @@ export default function Modal({
         return;
       case MODAL.OPEN:
         if (selectedDiagramId === 0) return;
-        loadDiagram(selectedDiagramId);
+        await loadDiagram(selectedDiagramId);
         setModal(MODAL.NONE);
         return;
       case MODAL.RENAME:
@@ -293,49 +292,52 @@ export default function Modal({
   };
 
   return (
-    <SemiUIModal
-      title={getModalTitle(modal)}
-      visible={modal !== MODAL.NONE}
-      onOk={getModalOnOk}
-      afterClose={() => {
-        setExportData(() => ({
-          data: "",
-          extension: "",
-          filename: `${title}_${new Date().toISOString()}`,
-        }));
-        setError({
-          type: STATUS.NONE,
-          message: "",
-        });
-        setImportData(null);
-        setImportSource({
-          src: "",
-          overwrite: true,
-          dbms: "MySQL",
-        });
-      }}
-      onCancel={() => {
-        if (modal === MODAL.RENAME) setTitle(prevTitle);
-        setModal(MODAL.NONE);
-      }}
-      centered
-      closeOnEsc={true}
-      okText={getOkText(modal)}
-      okButtonProps={{
-        disabled:
-          (error && error?.type === STATUS.ERROR) ||
-          (modal === MODAL.IMPORT &&
-            (error.type === STATUS.ERROR || !importData)) ||
-          (modal === MODAL.RENAME && title === "") ||
-          ((modal === MODAL.IMG || modal === MODAL.CODE) && !exportData.data) ||
-          (modal === MODAL.SAVEAS && saveAsTitle === "") ||
-          (modal === MODAL.IMPORT_SRC && importSource.src === ""),
-      }}
-      cancelText={t("cancel")}
-      width={modal === MODAL.NEW ? 740 : 600}
-      bodyStyle={{ maxHeight: window.innerHeight - 280, overflow: "auto" }}
-    >
-      {getModalBody()}
-    </SemiUIModal>
+    <>
+      {contextHolder}
+      <AntdModal
+        title={getModalTitle(modal)}
+        open={modal !== MODAL.NONE}
+        onOk={getModalOnOk}
+        afterClose={() => {
+          setExportData(() => ({
+            data: "",
+            extension: "",
+            filename: `${title}_${new Date().toISOString()}`,
+          }));
+          setError({
+            type: STATUS.NONE,
+            message: "",
+          });
+          setImportData(null);
+          setImportSource({
+            src: "",
+            overwrite: true,
+            dbms: "MySQL",
+          });
+        }}
+        keyboard
+        onCancel={() => {
+          if (modal === MODAL.RENAME) setTitle(prevTitle);
+          setModal(MODAL.NONE);
+        }}
+        centered
+        okText={getOkText(modal)}
+        okButtonProps={{
+          disabled:
+            (error && error?.type === STATUS.ERROR) ||
+            (modal === MODAL.IMPORT &&
+              (error.type === STATUS.ERROR || !importData)) ||
+            (modal === MODAL.RENAME && title === "") ||
+            ((modal === MODAL.IMG || modal === MODAL.CODE) && !exportData.data) ||
+            (modal === MODAL.SAVEAS && saveAsTitle === "") ||
+            (modal === MODAL.IMPORT_SRC && importSource.src === ""),
+        }}
+        cancelText={t("cancel")}
+        width={modal === MODAL.NEW ? 740 : 600}
+        styles={{ maxHeight: window.innerHeight - 280, overflow: "auto" }}
+      >
+        {getModalBody()}
+      </AntdModal>
+    </>
   );
 }

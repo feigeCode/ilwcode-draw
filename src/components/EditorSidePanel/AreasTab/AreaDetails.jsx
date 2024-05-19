@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Row, Col, Button, Input, Popover } from "@douyinfe/semi-ui";
-import { IconDeleteStroked } from "@douyinfe/semi-icons";
+import { Row, Col, Button, Input, Popover } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import { useAreas, useSaveState, useUndoRedo } from "../../../hooks";
 import {
   Action,
@@ -96,7 +96,7 @@ export default function AreaInfo({ data, i }) {
       </Col>
       <Col span={3}>
         <Button
-          icon={<IconDeleteStroked />}
+          icon={<DeleteOutlined />}
           type="danger"
           onClick={() => deleteArea(i, true)}
         />

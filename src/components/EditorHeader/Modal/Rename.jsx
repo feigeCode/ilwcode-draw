@@ -1,4 +1,4 @@
-import { Input } from "@douyinfe/semi-ui";
+import { Input } from "antd";
 import { useTranslation } from "react-i18next";
 
 export default function Rename({ title, setTitle }) {

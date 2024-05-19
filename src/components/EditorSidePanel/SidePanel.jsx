@@ -1,4 +1,4 @@
-import { Tabs, TabPane } from "@douyinfe/semi-ui";
+import { Tabs } from "antd";
 import { Tab } from "../../data/constants";
 import { useLayout, useSelect } from "../../hooks";
 import RelationshipsTab from "./RelationshipsTab/RelationshipsTab";
@@ -36,19 +36,17 @@ export default function SidePanel({ width, resize, setResize }) {
           <Tabs
             type="card"
             activeKey={selectedElement.currentTab}
-            lazyRender
             onChange={(key) =>
               setSelectedElement((prev) => ({ ...prev, currentTab: key }))
             }
-            collapsible
-          >
-            {tabList.length &&
-              tabList.map((tab) => (
-                <TabPane tab={tab.tab} itemKey={tab.itemKey} key={tab.itemKey}>
-                  <div className="p-2">{tab.component}</div>
-                </TabPane>
-              ))}
-          </Tabs>
+            items={ tabList.map((tab) => {
+              return {
+                key: tab.itemKey,
+                label: tab.tab,
+                children: <div className="p-2">{tab.component}</div>,
+              }
+            })}
+          />
         </div>
         {layout.issues && (
           <div className="mt-auto border-t-2 border-color shadow-inner">

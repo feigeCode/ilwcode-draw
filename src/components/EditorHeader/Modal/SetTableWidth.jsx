@@ -1,4 +1,4 @@
-import { InputNumber } from "@douyinfe/semi-ui";
+import { InputNumber } from "antd";
 import { useSettings } from "../../../hooks";
 
 export default function SetTableWidth() {

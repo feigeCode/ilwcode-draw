@@ -1,6 +1,8 @@
-import { Upload, Checkbox, Banner } from "@douyinfe/semi-ui";
 import { STATUS } from "../../../data/constants";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
+import { notification, Upload, Checkbox } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
 
 export default function ImportSource({
   importData,
@@ -9,10 +11,34 @@ export default function ImportSource({
   setError,
 }) {
   const { t } = useTranslation();
+  const [api, contextHolder] = notification.useNotification();
 
+  const openNotification = (type, message) => {
+    api.info({
+      type: type,
+      message: message,
+      placement: 'top'
+    });
+  };
+
+  useEffect(() => {
+    let type = "";
+    if (error.type === STATUS.ERROR){
+      type = "error";
+    }
+    if (error.type === STATUS.WARNING){
+      type = "warning";
+    }
+    if (error.type === STATUS.OK){
+      type = "success";
+    }
+    if (type !== ""){
+      openNotification(type, error.message);
+    }
+  }, [error]);
   return (
     <div>
-      <Upload
+      <Upload.Dragger
         action="#"
         beforeUpload={({ file, fileList }) => {
           const f = fileList[0].fileInstance;
@@ -32,9 +58,6 @@ export default function ImportSource({
             shouldUpload: false,
           };
         }}
-        draggable={true}
-        dragMainText={t("drag_and_drop_files")}
-        dragSubText={t("upload_sql_to_generate_diagrams")}
         accept=".sql"
         onRemove={() => {
           setError({
@@ -43,14 +66,20 @@ export default function ImportSource({
           });
           setImportData((prev) => ({ ...prev, src: "" }));
         }}
-        onFileChange={() =>
+        onChange={() =>
           setError({
             type: STATUS.NONE,
             message: "",
           })
         }
-        limit={1}
-      />
+        multiple={false}
+      >
+        <p className="ant-upload-drag-icon">
+          <InboxOutlined />
+        </p>
+        <p className="ant-upload-text">{t("drag_and_drop_files")}</p>
+        <p className="ant-upload-hint">{t("upload_sql_to_generate_diagrams")}</p>
+      </Upload.Dragger>
       <div>
         <div className="text-xs mb-3 mt-1 opacity-80">
           {t("only_mysql_supported")}
@@ -68,29 +97,6 @@ export default function ImportSource({
         >
           {t("overwrite_existing_diagram")}
         </Checkbox>
-        <div className="mt-2">
-          {error.type === STATUS.ERROR ? (
-            <Banner
-              type="danger"
-              fullMode={false}
-              description={<div>{error.message}</div>}
-            />
-          ) : error.type === STATUS.OK ? (
-            <Banner
-              type="info"
-              fullMode={false}
-              description={<div>{error.message}</div>}
-            />
-          ) : (
-            error.type === STATUS.WARNING && (
-              <Banner
-                type="warning"
-                fullMode={false}
-                description={<div>{error.message}</div>}
-              />
-            )
-          )}
-        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Collapse } from "@douyinfe/semi-ui";
+import { Collapse } from "antd";
 import { useSelect, useTables } from "../../../hooks";
 import Empty from "../Empty";
 import SearchBar from "./SearchBar";
@@ -14,34 +14,39 @@ export default function RelationshipsTab() {
   return (
     <>
       <SearchBar />
-      <Collapse
-        activeKey={
-          selectedElement.open &&
-          selectedElement.element === ObjectType.RELATIONSHIP
-            ? `${selectedElement.id}`
-            : ""
-        }
-        keepDOM
-        lazyRender
-        onChange={(k) =>
-          setSelectedElement((prev) => ({
-            ...prev,
-            open: true,
-            id: parseInt(k),
-            element: ObjectType.RELATIONSHIP,
-          }))
-        }
-        accordion
-      >
+
+
         {relationships.length <= 0 ? (
           <Empty
             title={t("no_relationships")}
             text={t("no_relationships_text")}
           />
         ) : (
-          relationships.map((r) => <RelationshipInfo key={r.id} data={r} />)
+          <Collapse
+            activeKey={
+              selectedElement.open &&
+              selectedElement.element === ObjectType.RELATIONSHIP
+                ? `${selectedElement.id}`
+                : ""
+            }
+            onChange={(k) =>
+              setSelectedElement((prev) => ({
+                ...prev,
+                open: true,
+                id: parseInt(k),
+                element: ObjectType.RELATIONSHIP,
+              }))
+            }
+            accordion
+            items={relationships.map((r) => {
+              return {
+                id: r.id,
+                label: <div id={`scroll_ref_${r.id}`} className="overflow-hidden text-ellipsis whitespace-nowrap">{r.name}</div>,
+                children: <RelationshipInfo key={r.id} data={r} />
+              }
+            })}
+          />
         )}
-      </Collapse>
     </>
   );
 }

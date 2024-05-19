@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useAreas } from "../../../hooks";
-import { AutoComplete } from "@douyinfe/semi-ui";
-import { IconSearch } from "@douyinfe/semi-icons";
+import { AutoComplete } from "antd";
 import { useTranslation } from "react-i18next";
 
 export default function SearchBar() {
@@ -10,23 +9,26 @@ export default function SearchBar() {
   const { t } = useTranslation();
 
   const [filteredResult, setFilteredResult] = useState(
-    areas.map((t) => t.name),
+    areas.map((t) => ({
+      value: t.name,
+      label: t.name
+    })),
   );
 
   const handleStringSearch = (value) => {
     setFilteredResult(
-      areas.map((t) => t.name).filter((i) => i.includes(value)),
+      areas.map((t) => ({
+        value: t.name,
+        label: t.name
+      })).filter((i) => i.value.includes(value)),
     );
   };
-
   return (
     <AutoComplete
-      data={filteredResult}
+      options={filteredResult}
       value={searchText}
-      showClear
-      prefix={<IconSearch />}
+      allowClear
       placeholder={t("search")}
-      emptyContent={<div className="p-3 popover-theme">{t("not_found")}</div>}
       onSearch={(v) => handleStringSearch(v)}
       onChange={(v) => setSearchText(v)}
       onSelect={(v) => {

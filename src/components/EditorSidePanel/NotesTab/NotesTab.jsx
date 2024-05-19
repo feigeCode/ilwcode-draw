@@ -1,5 +1,5 @@
-import { Button, Collapse } from "@douyinfe/semi-ui";
-import { IconPlus } from "@douyinfe/semi-icons";
+import { Button, Collapse } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { useNotes, useSelect } from "../../../hooks";
 import Empty from "../Empty";
 import SearchBar from "./SearchBar";
@@ -23,7 +23,7 @@ export default function NotesTab() {
           }
         />
         <div>
-          <Button icon={<IconPlus />} block onClick={() => addNote()}>
+          <Button icon={<PlusOutlined />} block onClick={() => addNote()}>
             {t("add_note")}
           </Button>
         </div>
@@ -33,8 +33,6 @@ export default function NotesTab() {
       ) : (
         <Collapse
           activeKey={selectedElement.open ? `${selectedElement.id}` : ""}
-          keepDOM
-          lazyRender
           onChange={(activeKey) => {
             setSelectedElement((prev) => ({
               ...prev,
@@ -43,10 +41,14 @@ export default function NotesTab() {
             }));
           }}
           accordion
+          items={ notes.map((n, i) => {
+            return {
+              key: n.id,
+              label: <div  id={`scroll_note_${n.id}`} className="overflow-hidden text-ellipsis whitespace-nowrap">{n.title}</div>,
+              children:  <NoteInfo data={n} key={i} nid={i} />,
+            }
+          })}
         >
-          {notes.map((n, i) => (
-            <NoteInfo data={n} key={i} nid={i} />
-          ))}
         </Collapse>
       )}
     </>

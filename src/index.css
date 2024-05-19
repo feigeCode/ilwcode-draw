@@ -2,36 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.semi-form-vertical .semi-form-field {
-  margin: 0;
-  padding-top: 8px !important;
-  padding-bottom: 8px !important;
-  overflow: hidden;
-}
-
-.semi-card .semi-collapse-item {
-  border: none !important;
-}
-
-.semi-button.semi-button-light {
-  background-color: rgba(var(--semi-grey-1), 1);
-}
-
-.semi-button.semi-button-light:hover {
-  background-color: rgba(var(--semi-grey-2), 1);
-}
-
-.semi-button.semi-button-primary:not(.semi-button-light):not(
-    .semi-button-borderless
-  ) {
-  background-color: rgba(var(--semi-blue-5), 1);
-}
-
-.semi-button.semi-button-primary:not(.semi-button-light):not(
-    .semi-button-borderless
-  ):hover {
-  background-color: rgba(var(--semi-blue-6), 1);
-}
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -103,14 +73,4 @@
   opacity: 0.8;
   background-image: radial-gradient(rgb(118, 118, 209) 1px, white 1px);
   background-size: 20px 20px;
-}
-
-
-.collapse-reset .semi-collapse-content {
-  padding: 4px 2px 8px 2px!important;
-}
-
-.collapse-reset .semi-collapse-header {
-  margin: 2px;
-  padding: 2px;
 }

@@ -6,18 +6,11 @@ import {
   tableHeaderHeight,
   tableColorStripHeight,
 } from "../../data/constants";
-import {
-  IconEdit,
-  IconMore,
-  IconMinus,
-  IconDeleteStroked,
-  IconKeyStroked,
-} from "@douyinfe/semi-icons";
-import { Popover, Tag, Button, SideSheet } from "@douyinfe/semi-ui";
 import { useLayout, useSettings, useTables, useSelect } from "../../hooks";
 import TableInfo from "../EditorSidePanel/TablesTab/TableInfo";
 import { useTranslation } from "react-i18next";
-
+import { Drawer,Popover, Tag, Button } from "antd";
+import { DeleteOutlined, EditOutlined ,MoreOutlined , MinusOutlined,KeyOutlined } from "@ant-design/icons";
 export default function Table(props) {
   const [hoveredField, setHoveredField] = useState(-1);
   const {
@@ -98,7 +91,7 @@ export default function Table(props) {
             <div className="hidden group-hover:block">
               <div className="flex justify-end items-center mx-2">
                 <Button
-                  icon={<IconEdit />}
+                  icon={<EditOutlined />}
                   size="small"
                   theme="solid"
                   style={{
@@ -108,6 +101,7 @@ export default function Table(props) {
                   onClick={openEditor}
                 />
                 <Popover
+                  placement="right"
                   key={tableData.key}
                   content={
                     <div className="popover-theme">
@@ -154,7 +148,7 @@ export default function Table(props) {
                         )}
                       </div>
                       <Button
-                        icon={<IconDeleteStroked />}
+                        icon={<DeleteOutlined />}
                         type="danger"
                         block
                         style={{ marginTop: "8px" }}
@@ -170,7 +164,7 @@ export default function Table(props) {
                   style={{ width: "200px", wordBreak: "break-word" }}
                 >
                   <Button
-                    icon={<IconMore />}
+                    icon={<MoreOutlined  />}
                     type="tertiary"
                     size="small"
                     style={{
@@ -234,16 +228,16 @@ export default function Table(props) {
           })}
         </div>
       </foreignObject>
-      <SideSheet
+      <Drawer
         title={t("edit")}
         size="small"
-        visible={
+        open={
           selectedElement.element === ObjectType.TABLE &&
           selectedElement.id === tableData.id &&
           selectedElement.open &&
           !layout.sidebar
         }
-        onCancel={() =>
+        onClose={() =>
           setSelectedElement((prev) => ({
             ...prev,
             open: !prev.open,
@@ -254,7 +248,7 @@ export default function Table(props) {
         <div className="sidesheet-theme">
           <TableInfo data={tableData} />
         </div>
-      </SideSheet>
+      </Drawer>
     </>
   );
 
@@ -319,12 +313,12 @@ export default function Table(props) {
               style={{
                 backgroundColor: "#d42020b3",
               }}
-              icon={<IconMinus />}
+              icon={<MinusOutlined />}
               onClick={() => deleteField(fieldData, tableData.id)}
             />
           ) : (
             <div className="flex gap-1 items-center">
-              {fieldData.primary && <IconKeyStroked />}
+              {fieldData.primary && <KeyOutlined />}
               <span>{fieldData.type}</span>
             </div>
           )}

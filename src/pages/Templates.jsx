@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Tabs, TabPane, Banner, Steps } from "@douyinfe/semi-ui";
-import { IconDeleteStroked } from "@douyinfe/semi-icons";
+import { Tabs, Steps } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import { db } from "../data/db";
 import { useLiveQuery } from "dexie-react-hooks";
 import Thumbnail from "../components/Thumbnail";
@@ -63,130 +63,118 @@ export default function Templates() {
               a quick start or inspire your application&apos;s architecture.
             </div>
           </div>
-          <Tabs>
-            <TabPane
-              tab={<span className="mx-2">Default templates</span>}
-              itemKey="1"
-            >
-              <div className="grid xl:grid-cols-3 grid-cols-2 sm:grid-cols-1 gap-10 my-6">
-                {defaultTemplates?.map((t, i) => (
+          <Tabs items={[{
+            key: "1",
+            label: <span className="mx-2">Default templates</span>,
+            children: <div className="grid xl:grid-cols-3 grid-cols-2 sm:grid-cols-1 gap-10 my-6">
+              {defaultTemplates?.map((t, i) => (
+                <div
+                  key={i}
+                  className="bg-gray-100 hover:translate-y-[-6px] transition-all duration-300 border rounded-md"
+                >
+                  <div className="h-48">
+                    <Thumbnail
+                      diagram={t}
+                      i={"1" + i}
+                      zoom={0.3}
+                      theme="light"
+                    />
+                  </div>
+                  <div className="px-4 py-3">
+                    <div className="flex justify-between">
+                      <div className="text-lg font-bold text-zinc-700">
+                        {t.title}
+                      </div>
+                      <button
+                        className="border rounded px-2 py-1 bg-white hover:bg-gray-200 transition-all duration-300"
+                        onClick={() => forkTemplate(t.id)}
+                      >
+                        <i className="fa-solid fa-code-fork"></i>
+                      </button>
+                    </div>
+                    <div>{t.description}</div>
+                  </div>
+                </div>
+              ))}
+            </div>,
+          }, {
+            key: "2",
+            label: <span className="mx-2">Your templates</span>,
+            children: customTemplates?.length > 0 ? (
+              <div className="grid xl:grid-cols-3 grid-cols-2 sm:grid-cols-1 gap-8 my-6">
+                {customTemplates?.map((c, i) => (
                   <div
                     key={i}
                     className="bg-gray-100 hover:translate-y-[-6px] transition-all duration-300 border rounded-md"
                   >
                     <div className="h-48">
-                      <Thumbnail
-                        diagram={t}
-                        i={"1" + i}
-                        zoom={0.3}
-                        theme="light"
-                      />
+                      <Thumbnail diagram={c} i={"2" + i} zoom={0.3} />
                     </div>
-                    <div className="px-4 py-3">
+                    <div className="px-4 py-3 w-full">
                       <div className="flex justify-between">
                         <div className="text-lg font-bold text-zinc-700">
-                          {t.title}
+                          {c.title}
                         </div>
+                        <div>
+                          <button
+                            className="me-1 border rounded px-2 py-1 bg-white hover:bg-gray-200 transition-all duration-300"
+                            onClick={() => forkTemplate(c.id)}
+                          >
+                            <i className="fa-solid fa-code-fork"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex justify-around mt-2">
                         <button
-                          className="border rounded px-2 py-1 bg-white hover:bg-gray-200 transition-all duration-300"
-                          onClick={() => forkTemplate(t.id)}
+                          className="w-full text-center flex justify-center items-center border rounded px-2 py-1 bg-white hover:bg-gray-200 transition-all duration-300 text-blue-500"
+                          onClick={() => editTemplate(c.id)}
                         >
-                          <i className="fa-solid fa-code-fork"></i>
+                          <i className="bi bi-pencil-fill"></i>
+                          <div className="ms-1.5 font-semibold">Edit</div>
+                        </button>
+                        <div className="border-l border-gray-300 mx-2" />
+                        <button
+                          className="w-full text-center flex justify-center items-center border rounded px-2 py-1 bg-white hover:bg-gray-200 transition-all duration-300 text-red-500"
+                          onClick={() => deleteTemplate(c.id)}
+                        >
+                          <DeleteOutlined />
+                          <div className="ms-1.5 font-semibold">Delete</div>
                         </button>
                       </div>
-                      <div>{t.description}</div>
                     </div>
                   </div>
                 ))}
               </div>
-            </TabPane>
-            <TabPane
-              tab={<span className="mx-2">Your templates</span>}
-              itemKey="2"
-            >
-              {customTemplates?.length > 0 ? (
-                <div className="grid xl:grid-cols-3 grid-cols-2 sm:grid-cols-1 gap-8 my-6">
-                  {customTemplates?.map((c, i) => (
-                    <div
-                      key={i}
-                      className="bg-gray-100 hover:translate-y-[-6px] transition-all duration-300 border rounded-md"
-                    >
-                      <div className="h-48">
-                        <Thumbnail diagram={c} i={"2" + i} zoom={0.3} />
-                      </div>
-                      <div className="px-4 py-3 w-full">
-                        <div className="flex justify-between">
-                          <div className="text-lg font-bold text-zinc-700">
-                            {c.title}
-                          </div>
-                          <div>
-                            <button
-                              className="me-1 border rounded px-2 py-1 bg-white hover:bg-gray-200 transition-all duration-300"
-                              onClick={() => forkTemplate(c.id)}
-                            >
-                              <i className="fa-solid fa-code-fork"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div className="flex justify-around mt-2">
-                          <button
-                            className="w-full text-center flex justify-center items-center border rounded px-2 py-1 bg-white hover:bg-gray-200 transition-all duration-300 text-blue-500"
-                            onClick={() => editTemplate(c.id)}
-                          >
-                            <i className="bi bi-pencil-fill"></i>
-                            <div className="ms-1.5 font-semibold">Edit</div>
-                          </button>
-                          <div className="border-l border-gray-300 mx-2" />
-                          <button
-                            className="w-full text-center flex justify-center items-center border rounded px-2 py-1 bg-white hover:bg-gray-200 transition-all duration-300 text-red-500"
-                            onClick={() => deleteTemplate(c.id)}
-                          >
-                            <IconDeleteStroked />
-                            <div className="ms-1.5 font-semibold">Delete</div>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="py-5">
-                  <Banner
-                    fullMode={false}
-                    type="info"
-                    bordered
-                    icon={null}
-                    closeIcon={null}
-                    description={<div>You have no custom templates saved.</div>}
+            ) : (
+              <div className="py-5">
+                <div className="grid grid-cols-5 sm:grid-cols-1 gap-4 place-content-center my-4">
+                  <img
+                    src={template_screenshot}
+                    className="border col-span-3 sm:cols-span-1 rounded"
                   />
-                  <div className="grid grid-cols-5 sm:grid-cols-1 gap-4 place-content-center my-4">
-                    <img
-                      src={template_screenshot}
-                      className="border col-span-3 sm:cols-span-1 rounded"
-                    />
-                    <div className="col-span-2 sm:cols-span-1">
-                      <div className="text-xl font-bold my-4">
-                        How to save a template
-                      </div>
-                      <Steps direction="vertical" style={{ margin: "12px" }}>
-                        <Steps.Step
-                          title="Build a diagram"
-                          description="Build the template in the editor"
-                        />
-                        <Steps.Step
-                          title="Save as template"
-                          description="Editor > File > Save as template"
-                        />
-                        <Steps.Step
-                          title="Load a template"
-                          description="Fork a template to build on"
-                        />
-                      </Steps>
+                  <div className="col-span-2 sm:cols-span-1">
+                    <div className="text-xl font-bold my-4">
+                      How to save a template
                     </div>
+                    <Steps direction="vertical" style={{ margin: "12px" }}>
+                      <Steps.Step
+                        title="Build a diagram"
+                        description="Build the template in the editor"
+                      />
+                      <Steps.Step
+                        title="Save as template"
+                        description="Editor > File > Save as template"
+                      />
+                      <Steps.Step
+                        title="Load a template"
+                        description="Fork a template to build on"
+                      />
+                    </Steps>
                   </div>
                 </div>
-              )}
-            </TabPane>
+              </div>
+            )
+          }]}>
           </Tabs>
         </div>
       </div>

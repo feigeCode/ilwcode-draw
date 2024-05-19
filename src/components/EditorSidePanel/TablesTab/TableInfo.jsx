@@ -2,12 +2,10 @@ import { useState } from "react";
 import {
   Collapse,
   Input,
-  TextArea,
   Button,
   Card,
   Popover, Col, Row,
-} from "@douyinfe/semi-ui";
-import { IconDeleteStroked, IconRefresh } from "@douyinfe/semi-icons";
+} from "antd";
 import { useTables, useUndoRedo } from "../../../hooks";
 import { Action, ObjectType, defaultBlue } from "../../../data/constants";
 import ColorPalette from "../../ColorPicker";
@@ -15,6 +13,7 @@ import TableField from "./TableField";
 import IndexDetails from "./IndexDetails";
 import { useTranslation } from "react-i18next";
 import FieldDetails from "./FieldDetails";
+import { DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
 
 export default function TableInfo({ data }) {
   const { t } = useTranslation();
@@ -60,20 +59,16 @@ export default function TableInfo({ data }) {
             />
           </Col>
           <Col span={6}>
-            <Button title={t('换一个')} icon={<IconRefresh />}></Button>
+            <Button title={t('换一个')} icon={<ReloadOutlined />}></Button>
           </Col>
         </Row>
       </div>
       <Collapse
-        lazyRender
         accordion
-        keepDOM
-      >
-        {data.fields.map((f, j) => (
-          <div
-            key={"field_" + j}
-            className="cursor-pointer">
-            <Collapse.Panel header={<TableField
+        items={data.fields.map((f,j) => {
+          return {
+            id: f.id,
+            label: <TableField
               data={f}
               tid={data.id}
               index={j}
@@ -108,82 +103,87 @@ export default function TableInfo({ data }) {
                   }),
                 );
               }}
-            />} itemKey={`key-${j}`}>
-              <div className="px-1 w-[240px] popover-theme">
-                <FieldDetails data={f} index={j} tid={data.id} />
-              </div>
-            </Collapse.Panel>
-          </div>
-          ))}
+            />,
+            children: <div key={"field_" + j} className="cursor-pointer">
+                <div className="px-1 w-[240px] popover-theme">
+                  <FieldDetails data={f} index={j} tid={data.id} />
+                </div>
+            </div>,
+          }
+        })}
+      >
+
       </Collapse>
       {data.indices.length > 0 && (
         <Card
-          bodyStyle={{ padding: "4px" }}
+          styles={{ body: { padding: "4px" } }}
           style={{ marginTop: "12px", marginBottom: "12px" }}
           headerLine={false}
         >
           <Collapse
             activeKey={indexActiveKey}
-            keepDOM
-            lazyRender
             onChange={(itemKey) => setIndexActiveKey(itemKey)}
             accordion
+            items={data.indices.map((idx, k) => {
+              return {
+                id: "1",
+                label: t("indices"),
+                children: <IndexDetails
+                            key={"index_" + k}
+                            data={idx}
+                            iid={k}
+                            tid={data.id}
+                            fields={data.fields.map((e) => ({
+                              value: e.name,
+                              label: e.name,
+                            }))}
+                />,
+              };
+            })}
           >
-            <Collapse.Panel header={t("indices")} itemKey="1">
-              {data.indices.map((idx, k) => (
-                <IndexDetails
-                  key={"index_" + k}
-                  data={idx}
-                  iid={k}
-                  tid={data.id}
-                  fields={data.fields.map((e) => ({
-                    value: e.name,
-                    label: e.name,
-                  }))}
-                />
-              ))}
-            </Collapse.Panel>
           </Collapse>
         </Card>
       )}
       <Card
-        bodyStyle={{ padding: "4px" }}
+        styles={{ body: { padding: "4px" } }}
         style={{ marginTop: "12px", marginBottom: "12px" }}
         headerLine={false}
       >
-        <Collapse keepDOM lazyRender>
-          <Collapse.Panel header={t("comment")} itemKey="1">
-            <TextArea
-              field="comment"
-              value={data.comment}
-              autosize
-              placeholder={t("comment")}
-              rows={1}
-              onChange={(value) =>
-                updateTable(data.id, { comment: value }, false)
-              }
-              onFocus={(e) => setEditField({ comment: e.target.value })}
-              onBlur={(e) => {
-                if (e.target.value === editField.comment) return;
-                setUndoStack((prev) => [
-                  ...prev,
-                  {
-                    action: Action.EDIT,
-                    element: ObjectType.TABLE,
-                    component: "self",
-                    tid: data.id,
-                    undo: editField,
-                    redo: { comment: e.target.value },
-                    message: t("edit_table", {
-                      tableName: e.target.value,
-                      extra: "[comment]",
-                    }),
-                  },
-                ]);
-                setRedoStack([]);
-              }}
-            />
-          </Collapse.Panel>
+        <Collapse items={[{
+          id: "1",
+          label: t("comment"),
+          children: <Input.TextArea
+            field="comment"
+            value={data.comment}
+            autosize
+            placeholder={t("comment")}
+            rows={1}
+            onChange={(value) =>
+              updateTable(data.id, { comment: value }, false)
+            }
+            onFocus={(e) => setEditField({ comment: e.target.value })}
+            onBlur={(e) => {
+              if (e.target.value === editField.comment) return;
+              setUndoStack((prev) => [
+                ...prev,
+                {
+                  action: Action.EDIT,
+                  element: ObjectType.TABLE,
+                  component: "self",
+                  tid: data.id,
+                  undo: editField,
+                  redo: { comment: e.target.value },
+                  message: t("edit_table", {
+                    tableName: e.target.value,
+                    extra: "[comment]",
+                  }),
+                },
+              ]);
+              setRedoStack([]);
+            }}
+          />
+        }]}
+        >
         </Collapse>
       </Card>
       <div className="flex justify-between items-center gap-1 mb-2">
@@ -317,8 +317,9 @@ export default function TableInfo({ data }) {
             {t("add_field")}
           </Button>
           <Button
-            icon={<IconDeleteStroked />}
-            type="danger"
+            icon={<DeleteOutlined />}
+            type="default"
+            danger
             onClick={() => deleteTable(data.id)}
           />
         </div>

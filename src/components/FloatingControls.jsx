@@ -1,4 +1,4 @@
-import { Divider, Tooltip } from "@douyinfe/semi-ui";
+import { Divider, Tooltip } from "antd";
 import { useTransform, useLayout } from "../hooks";
 import { exitFullscreen } from "../utils/fullscreen";
 import { useTranslation } from "react-i18next";
@@ -22,9 +22,9 @@ export default function FloatingControls() {
         >
           <i className="bi bi-dash-lg" />
         </button>
-        <Divider align="center" layout="vertical" />
+        <Divider orientation="center" type="vertical" />
         <div className="px-3 py-2">{parseInt(transform.zoom * 100)}%</div>
-        <Divider align="center" layout="vertical" />
+        <Divider orientation="center" type="vertical" />
         <button
           className="px-3 py-2"
           onClick={() =>
@@ -37,7 +37,7 @@ export default function FloatingControls() {
           <i className="bi bi-plus-lg" />
         </button>
       </div>
-      <Tooltip content={t("exit")}>
+      <Tooltip title={t("exit")}>
         <button
           className="px-3 py-2 rounded-lg popover-theme"
           onClick={() => {

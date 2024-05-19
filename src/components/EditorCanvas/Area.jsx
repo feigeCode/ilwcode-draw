@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Button, Popover, Input } from "@douyinfe/semi-ui";
-import { IconEdit, IconDeleteStroked } from "@douyinfe/semi-icons";
+import { Button, Popover, Input } from "antd";
 import {
   Tab,
   Action,
@@ -19,6 +18,7 @@ import {
 } from "../../hooks";
 import ColorPalette from "../ColorPicker";
 import { useTranslation } from "react-i18next";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 export default function Area({ data, onMouseDown, setResize, setInitCoords }) {
   const [hovered, setHovered] = useState(false);
@@ -116,7 +116,7 @@ export default function Area({ data, onMouseDown, setResize, setInitCoords }) {
               </div>
               {(hovered || (areaIsSelected() && !layout.sidebar)) && (
                 <Popover
-                  visible={areaIsSelected() && !layout.sidebar}
+                  open={areaIsSelected() && !layout.sidebar}
                   onClickOutSide={onClickOutSide}
                   stopPropagation
                   content={<EditPopoverContent data={data} />}
@@ -125,7 +125,7 @@ export default function Area({ data, onMouseDown, setResize, setInitCoords }) {
                   showArrow
                 >
                   <Button
-                    icon={<IconEdit />}
+                    icon={<EditOutlined />}
                     size="small"
                     theme="solid"
                     style={{
@@ -268,7 +268,7 @@ function EditPopoverContent({ data }) {
       </div>
       <div className="flex">
         <Button
-          icon={<IconDeleteStroked />}
+          icon={<DeleteOutlined />}
           type="danger"
           block
           onClick={() => deleteArea(data.id, true)}

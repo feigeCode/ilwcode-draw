@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   Checkbox,
   Input,
-  TextArea,
   Row,
   Col,
   Dropdown,
@@ -10,15 +9,9 @@ import {
   Popover,
   Tag,
   List,
-  RadioGroup,
   Radio,
-} from "@douyinfe/semi-ui";
-import {
-  IconPlus,
-  IconMore,
-  IconDeleteStroked,
-  IconCaretdown,
-} from "@douyinfe/semi-icons";
+} from "antd";
+import { PlusOutlined ,MoreOutlined, DeleteOutlined, CaretDownOutlined  } from '@ant-design/icons'
 import { State } from "../../../data/constants";
 import { useTasks, useSaveState } from "../../../hooks";
 import { useTranslation } from "react-i18next";
@@ -130,11 +123,11 @@ export default function Todo() {
             theme="borderless"
             type="tertiary"
           >
-            {t("sort_by")} <IconCaretdown />
+            {t("sort_by")} <CaretDownOutlined />
           </Button>
         </Dropdown>
         <Button
-          icon={<IconPlus />}
+          icon={<PlusOutlined />}
           block
           onClick={() => {
             setTasks((prev) => [
@@ -187,7 +180,7 @@ export default function Todo() {
                           <div className="mb-2 font-semibold">
                             {t("priority")}:
                           </div>
-                          <RadioGroup
+                          <Radio.Group
                             onChange={(e) => {
                               updateTask(i, { priority: e.target.value });
                               setSaveState(State.SAVING);
@@ -215,9 +208,9 @@ export default function Todo() {
                                 {priorityLabel(Priority.HIGH)}
                               </Tag>
                             </Radio>
-                          </RadioGroup>
+                          </Radio.Group>
                           <Button
-                            icon={<IconDeleteStroked />}
+                            icon={<DeleteOutlined />}
                             type="danger"
                             block
                             style={{ marginTop: "12px" }}
@@ -236,7 +229,7 @@ export default function Todo() {
                       showArrow
                       className="w-[180px]"
                     >
-                      <Button icon={<IconMore />} type="tertiary" />
+                      <Button icon={<MoreOutlined />} type="tertiary" />
                     </Popover>
                   </Col>
                 </Row>
@@ -244,12 +237,12 @@ export default function Todo() {
                   <Row className="mb-2">
                     <Col span={2}></Col>
                     <Col span={22}>
-                      <TextArea
+                      <Input.TextArea
                         placeholder={t("details")}
                         onChange={(v) => updateTask(i, { details: v })}
                         value={t.details}
                         onBlur={() => setSaveState(State.SAVING)}
-                      ></TextArea>
+                      ></Input.TextArea>
                     </Col>
                   </Row>
                 )}

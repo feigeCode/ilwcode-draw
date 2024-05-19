@@ -1,11 +1,10 @@
 import { Action, ObjectType, sqlDataTypes } from "../../../data/constants";
-import { Row, Col, Input, Button, Popover, Select } from "@douyinfe/semi-ui";
-import { IconMore, IconKeyStroked, IconArrowDown, IconArrowUp } from "@douyinfe/semi-icons";
+import { Row, Col, Input, Select } from "antd";
 import { getSize, hasCheck, hasPrecision, isSized } from "../../../utils/toSQL";
 import { useTables, useTypes, useUndoRedo } from "../../../hooks";
 import { useState } from "react";
-import FieldDetails from "./FieldDetails";
 import { useTranslation } from "react-i18next";
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 
 export default function TableField({ data, tid, index, hasDown, hasUp, updateFieldIndex }) {
   const { updateField } = useTables();
@@ -25,7 +24,7 @@ export default function TableField({ data, tid, index, hasDown, hasUp, updateFie
               onClick={() => {
                   updateFieldIndex(index - 1)
               }}>
-              <IconArrowUp />
+              <ArrowUpOutlined />
             </a>
           </Col>
         }
@@ -36,7 +35,7 @@ export default function TableField({ data, tid, index, hasDown, hasUp, updateFie
               onClick={() => {
                 updateFieldIndex(index + 1)
             }}>
-              <IconArrowDown />
+              <ArrowDownOutlined />
             </a>
           </Col>
         }
@@ -72,7 +71,7 @@ export default function TableField({ data, tid, index, hasDown, hasUp, updateFie
         <Col span={10}>
           <Select
             className="w-full"
-            optionList={[
+            options={[
               ...sqlDataTypes.map((value) => ({
                 label: value,
                 value: value,
@@ -82,7 +81,6 @@ export default function TableField({ data, tid, index, hasDown, hasUp, updateFie
                 value: type.name.toUpperCase(),
               })),
             ]}
-            showArrow={false}
             filter
             value={data.type}
             validateStatus={data.type === "" ? "error" : "default"}

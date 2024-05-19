@@ -2,16 +2,28 @@ import {
   ddbDiagramIsValid,
   jsonDiagramIsValid,
 } from "../../../utils/validateSchema";
-import { Upload, Banner } from "@douyinfe/semi-ui";
 import { STATUS } from "../../../data/constants";
 import { useAreas, useNotes, useTables } from "../../../hooks";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
+import { notification,Upload } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
+
 
 export default function ImportDiagram({ setImportData, error, setError }) {
   const { areas } = useAreas();
   const { notes } = useNotes();
   const { tables, relationships } = useTables();
   const { t } = useTranslation();
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotification = (type, message) => {
+    api.info({
+      type: type,
+      message: message,
+      placement: 'top'
+    });
+  };
 
   const diagramIsEmpty = () => {
     return (
@@ -22,9 +34,26 @@ export default function ImportDiagram({ setImportData, error, setError }) {
     );
   };
 
+  useEffect(() => {
+    let type = "";
+    if (error.type === STATUS.ERROR){
+      type = "error";
+    }
+    if (error.type === STATUS.WARNING){
+      type = "warning";
+    }
+    if (error.type === STATUS.OK){
+      type = "success";
+    }
+    if (type !== ""){
+      openNotification(type, error.message);
+    }
+  }, [error]);
+
   return (
     <div>
-      <Upload
+      {contextHolder}
+      <Upload.Dragger
         action="#"
         beforeUpload={({ file, fileList }) => {
           const f = fileList[0].fileInstance;
@@ -85,9 +114,6 @@ export default function ImportDiagram({ setImportData, error, setError }) {
             shouldUpload: false,
           };
         }}
-        draggable={true}
-        dragMainText={t("drag_and_drop_files")}
-        dragSubText={t("support_json_and_ddb")}
         accept="application/json,.ddb"
         onRemove={() =>
           setError({
@@ -95,35 +121,20 @@ export default function ImportDiagram({ setImportData, error, setError }) {
             message: "",
           })
         }
-        onFileChange={() =>
+        onChange={() =>
           setError({
             type: STATUS.NONE,
             message: "",
           })
         }
-        limit={1}
-      />
-      {error.type === STATUS.ERROR ? (
-        <Banner
-          type="danger"
-          fullMode={false}
-          description={<div>{error.message}</div>}
-        />
-      ) : error.type === STATUS.OK ? (
-        <Banner
-          type="info"
-          fullMode={false}
-          description={<div>{error.message}</div>}
-        />
-      ) : (
-        error.type === STATUS.WARNING && (
-          <Banner
-            type="warning"
-            fullMode={false}
-            description={<div>{error.message}</div>}
-          />
-        )
-      )}
+        multiple={false}
+      >
+        <p className="ant-upload-drag-icon">
+          <InboxOutlined />
+        </p>
+        <p className="ant-upload-text">{t("drag_and_drop_files")}</p>
+        <p className="ant-upload-hint">{t("support_json_and_ddb")}</p>
+      </Upload.Dragger>
     </div>
   );
 }

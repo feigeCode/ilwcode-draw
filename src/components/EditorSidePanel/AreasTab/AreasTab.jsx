@@ -1,5 +1,5 @@
-import { Button } from "@douyinfe/semi-ui";
-import { IconPlus } from "@douyinfe/semi-icons";
+import { Button } from "antd";
+import { PlusOutlined  } from "@ant-design/icons";
 import Empty from "../Empty";
 import { useAreas } from "../../../hooks";
 import SearchBar from "./SearchBar";
@@ -15,7 +15,7 @@ export default function AreasTab() {
       <div className="flex gap-2">
         <SearchBar />
         <div>
-          <Button icon={<IconPlus />} block onClick={addArea}>
+          <Button icon={<PlusOutlined />} block onClick={addArea}>
             {t("add_area")}
           </Button>
         </div>

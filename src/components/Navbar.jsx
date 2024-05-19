@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo_light_160.png";
-import { SideSheet } from "@douyinfe/semi-ui";
-import { IconMenu } from "@douyinfe/semi-icons";
+import { Drawer } from "antd";
+import { MenuOutlined } from "@ant-design/icons";
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -43,16 +43,16 @@ export default function Navbar() {
           onClick={() => setOpenMenu((prev) => !prev)}
           className="hidden md:inline-block h-[24px]"
         >
-          <IconMenu size="extra-large" />
+          <MenuOutlined />
         </button>
       </div>
       <hr />
-      <SideSheet
+      <Drawer
         title={
           <img src={logo} alt="logo" className="sm:h-[32px] md:h-[42px]" />
         }
-        visible={openMenu}
-        onCancel={() => setOpenMenu(false)}
+        open={openMenu}
+        onClose={() => setOpenMenu(false)}
         width={window.innerWidth}
       >
         <Link
@@ -81,7 +81,7 @@ export default function Navbar() {
           Templates
         </Link>
         <hr />
-      </SideSheet>
+      </Drawer>
     </>
   );
 }

@@ -6,14 +6,13 @@ import {
   Input,
   Button,
   Select,
-  TagInput,
   InputNumber,
   Popover,
-} from "@douyinfe/semi-ui";
-import { IconDeleteStroked, IconMore } from "@douyinfe/semi-icons";
+} from "antd";
 import { isSized, hasPrecision, getSize } from "../../../utils/toSQL";
 import { useUndoRedo, useTypes } from "../../../hooks";
 import { useTranslation } from "react-i18next";
+import { DeleteOutlined, MoreOutlined } from "@ant-design/icons";
 
 export default function TypeField({ data, tid, fid }) {
   const { types, updateType } = useTypes();
@@ -61,7 +60,7 @@ export default function TypeField({ data, tid, fid }) {
       <Col span={11}>
         <Select
           className="w-full"
-          optionList={[
+          options={[
             ...sqlDataTypes.map((value) => ({
               label: value,
               value: value,
@@ -137,49 +136,50 @@ export default function TypeField({ data, tid, fid }) {
                   <div className="font-semibold mb-1">
                     {data.type} {t("values")}
                   </div>
-                  <TagInput
-                    separator={[",", ", ", " ,"]}
-                    value={data.values}
-                    validateStatus={
-                      !data.values || data.values.length === 0
-                        ? "error"
-                        : "default"
-                    }
-                    className="my-2"
-                    placeholder={t("use_for_batch_input")}
-                    onChange={(v) =>
-                      updateType(tid, {
-                        fields: types[tid].fields.map((e, id) =>
-                          id === fid ? { ...data, values: v } : e,
-                        ),
-                      })
-                    }
-                    onFocus={() => setEditField({ values: data.values })}
-                    onBlur={() => {
-                      if (
-                        JSON.stringify(editField.values) ===
-                        JSON.stringify(data.values)
-                      )
-                        return;
-                      setUndoStack((prev) => [
-                        ...prev,
-                        {
-                          action: Action.EDIT,
-                          element: ObjectType.TYPE,
-                          component: "field",
-                          tid: tid,
-                          fid: fid,
-                          undo: editField,
-                          redo: { values: data.values },
-                          message: t("edit_type", {
-                            typeName: data.name,
-                            extra: "[field]",
-                          }),
-                        },
-                      ]);
-                      setRedoStack([]);
-                    }}
-                  />
+                  {/* TODO TagInput */}
+                  {/*<TagInput*/}
+                  {/*  separator={[",", ", ", " ,"]}*/}
+                  {/*  value={data.values}*/}
+                  {/*  validateStatus={*/}
+                  {/*    !data.values || data.values.length === 0*/}
+                  {/*      ? "error"*/}
+                  {/*      : "default"*/}
+                  {/*  }*/}
+                  {/*  className="my-2"*/}
+                  {/*  placeholder={t("use_for_batch_input")}*/}
+                  {/*  onChange={(v) =>*/}
+                  {/*    updateType(tid, {*/}
+                  {/*      fields: types[tid].fields.map((e, id) =>*/}
+                  {/*        id === fid ? { ...data, values: v } : e,*/}
+                  {/*      ),*/}
+                  {/*    })*/}
+                  {/*  }*/}
+                  {/*  onFocus={() => setEditField({ values: data.values })}*/}
+                  {/*  onBlur={() => {*/}
+                  {/*    if (*/}
+                  {/*      JSON.stringify(editField.values) ===*/}
+                  {/*      JSON.stringify(data.values)*/}
+                  {/*    )*/}
+                  {/*      return;*/}
+                  {/*    setUndoStack((prev) => [*/}
+                  {/*      ...prev,*/}
+                  {/*      {*/}
+                  {/*        action: Action.EDIT,*/}
+                  {/*        element: ObjectType.TYPE,*/}
+                  {/*        component: "field",*/}
+                  {/*        tid: tid,*/}
+                  {/*        fid: fid,*/}
+                  {/*        undo: editField,*/}
+                  {/*        redo: { values: data.values },*/}
+                  {/*        message: t("edit_type", {*/}
+                  {/*          typeName: data.name,*/}
+                  {/*          extra: "[field]",*/}
+                  {/*        }),*/}
+                  {/*      },*/}
+                  {/*    ]);*/}
+                  {/*    setRedoStack([]);*/}
+                  {/*  }}*/}
+                  {/*/>*/}
                 </>
               )}
               {isSized(data.type) && (
@@ -264,9 +264,10 @@ export default function TypeField({ data, tid, fid }) {
                 </>
               )}
               <Button
-                icon={<IconDeleteStroked />}
+                icon={<DeleteOutlined />}
                 block
-                type="danger"
+                type="default"
+                danger
                 onClick={() => {
                   setUndoStack((prev) => [
                     ...prev,
@@ -296,7 +297,7 @@ export default function TypeField({ data, tid, fid }) {
           trigger="click"
           position="right"
         >
-          <Button icon={<IconMore />} type="tertiary" />
+          <Button icon={<MoreOutlined />} type="default" />
         </Popover>
       </Col>
     </Row>

@@ -1,12 +1,27 @@
 import { db } from "../../../data/db";
-import { Banner } from "@douyinfe/semi-ui";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useTranslation } from "react-i18next";
+import { notification } from "antd";
+import { useEffect } from "react";
 
 export default function Open({ selectedDiagramId, setSelectedDiagramId }) {
   const diagrams = useLiveQuery(() => db.diagrams.toArray());
   const { t } = useTranslation();
+  const [api, contextHolder] = notification.useNotification();
 
+  const openNotification = (type, message) => {
+    api.info({
+      type: type,
+      message: message,
+      placement: 'top'
+    });
+  };
+
+  useEffect(() => {
+    if (diagrams?.length === 0 ){
+      openNotification('info', 'You have no saved diagrams.')
+    }
+  }, []);
   const getDiagramSize = (d) => {
     const size = JSON.stringify(d).length;
     let sizeStr;
@@ -21,14 +36,7 @@ export default function Open({ selectedDiagramId, setSelectedDiagramId }) {
   return (
     <div>
       {diagrams?.length === 0 ? (
-        <Banner
-          fullMode={false}
-          type="info"
-          bordered
-          icon={null}
-          closeIcon={null}
-          description={<div>You have no saved diagrams.</div>}
-        />
+        <></>
       ) : (
         <div className="max-h-[360px]">
           <table className="w-full text-left border-separate border-spacing-x-0">

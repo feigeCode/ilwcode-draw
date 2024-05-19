@@ -1,11 +1,8 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useLayoutEffect } from "react";
 import Editor from "./pages/Editor";
-import Survey from "./pages/Survey";
-import BugReport from "./pages/BugReport";
 import Shortcuts from "./pages/Shortcuts";
 import Templates from "./pages/Templates";
-import LandingPage from "./pages/LandingPage";
 import SettingsContextProvider from "./context/SettingsContext";
 import useSettings from "./hooks/useSettings";
 import NotFound from "./pages/NotFound";
@@ -16,20 +13,11 @@ export default function App() {
       <BrowserRouter>
         <RestoreScroll />
         <Routes>
-          <Route path="/" element={<LandingPage />} />
           <Route
-            path="/editor"
+            path="/"
             element={
               <ThemedPage>
                 <Editor />
-              </ThemedPage>
-            }
-          />
-          <Route
-            path="/survey"
-            element={
-              <ThemedPage>
-                <Survey />
               </ThemedPage>
             }
           />
@@ -38,14 +26,6 @@ export default function App() {
             element={
               <ThemedPage>
                 <Shortcuts />
-              </ThemedPage>
-            }
-          />
-          <Route
-            path="/bug-report"
-            element={
-              <ThemedPage>
-                <BugReport />
               </ThemedPage>
             }
           />

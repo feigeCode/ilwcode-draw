@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import logo_light from "../assets/logo_light_160.png";
 import logo_dark from "../assets/logo_dark_160.png";
-import { AutoComplete, Button } from "@douyinfe/semi-ui";
-import { IconSearch, IconSun, IconMoon } from "@douyinfe/semi-icons";
+import { AutoComplete, Button,Input } from "antd";
 import { Link } from "react-router-dom";
 import { shortcuts } from "../data/shortcuts";
+import { MoonOutlined, SunOutlined } from "@ant-design/icons";
 
 export default function Shortcuts() {
   const [theme, setTheme] = useState("");
   const [value, setValue] = useState("");
   const [filteredResult, setFilteredResult] = useState(
     shortcuts.map((t) => {
-      return t.shortcut;
+      return {
+        label: t.shortcut,
+        value: t.shortcut
+      };
     })
   );
 
@@ -23,7 +26,10 @@ export default function Shortcuts() {
             i.shortcut.toLowerCase().includes(value.toLowerCase()) ||
             i.title.toLowerCase().includes(value.toLowerCase())
         )
-        .map((i) => i.shortcut)
+        .map((i) => ({
+          label: i.shortcut,
+          value : i.shortcut
+        }))
     );
   };
 
@@ -66,11 +72,12 @@ export default function Shortcuts() {
         </div>
         <div className="flex items-center">
           <Button
+            type={"primary"}
             icon={
               theme === "dark" ? (
-                <IconSun size="extra-large" />
+                <SunOutlined />
               ) : (
-                <IconMoon size="extra-large" />
+                <MoonOutlined />
               )
             }
             theme="borderless"
@@ -78,9 +85,10 @@ export default function Shortcuts() {
           />
           <div className="ms-2 lg:inline md:inline sm:hidden">
             <AutoComplete
-              prefix={<IconSearch />}
-              placeholder="Search..."
-              data={filteredResult}
+              style={{
+                width: 200
+              }}
+              options={filteredResult}
               value={value}
               onSearch={(v) => handleStringSearch(v)}
               emptyContent={
@@ -88,7 +96,10 @@ export default function Shortcuts() {
               }
               onChange={(v) => setValue(v)}
               onSelect={() => {}}
-            ></AutoComplete>
+            >
+              <Input.Search size="middle" placeholder="Search..." enterButton />
+
+            </AutoComplete>
           </div>
         </div>
       </div>
@@ -97,10 +108,8 @@ export default function Shortcuts() {
       />
       <div className="w-full mt-4 mx-auto sm:inline-block hidden text-center">
         <AutoComplete
-          prefix={<IconSearch />}
-          placeholder="Search..."
           className="w-[80%]"
-          data={filteredResult}
+          options={filteredResult}
           value={value}
           onSearch={(v) => handleStringSearch(v)}
           emptyContent={
@@ -108,7 +117,9 @@ export default function Shortcuts() {
           }
           onChange={(v) => setValue(v)}
           onSelect={() => {}}
-        ></AutoComplete>
+        >
+          <Input.Search size="large" placeholder="Search..." enterButton />
+        </AutoComplete>
       </div>
       <div className="grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 my-6 mx-20 sm:mx-6 gap-5 select-none">
         {shortcuts.map((s, i) => (
