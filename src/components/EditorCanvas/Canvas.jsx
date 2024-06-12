@@ -364,7 +364,7 @@ export default function Canvas() {
       tables[linkingLine.startTableId].fields[linkingLine.startFieldId].type !==
       tables[hoveredTable.tableId].fields[hoveredTable.field].type
     ) {
-      Toast.info(t("connot_connect"));
+      Toast.info(t("cannot_connect"));
       return;
     }
     if (
