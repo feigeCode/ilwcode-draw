@@ -286,12 +286,16 @@ export default function WorkSpace() {
         lastSaved={lastSaved}
         setLastSaved={setLastSaved}
       />
+
       <div
         className="flex h-full overflow-y-auto"
         onMouseUp={() => setResize(false)}
         onMouseLeave={() => setResize(false)}
         onMouseMove={handleResize}
       >
+        {layout.sidebar && (
+          <SidePanel resize={resize} setResize={setResize} width={width} />
+        )}
         <div className="relative w-full h-full overflow-hidden">
           <Canvas saveState={saveState} setSaveState={setSaveState} />
           {!(layout.sidebar || layout.toolbar || layout.header) && (
@@ -300,9 +304,6 @@ export default function WorkSpace() {
             </div>
           )}
         </div>
-        {layout.sidebar && (
-          <SidePanel resize={resize} setResize={setResize} width={width} />
-        )}
       </div>
     </div>
   );

@@ -7,6 +7,9 @@ import {
   tableWidth,
 } from "../data/constants";
 import { calcPath } from "../utils/calcPath";
+import CrossPattern from "./EditorCanvas/CrossPattern.jsx";
+import DotsPattern from "./EditorCanvas/DotsPattern.jsx";
+import { useSettings } from "../hooks/index.js";
 
 function Table({ table, grab }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -156,7 +159,7 @@ export default function SimpleCanvas({ diagram, zoom }) {
   const [tables, setTables] = useState(diagram.tables);
   const [dragging, setDragging] = useState(-1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
-
+  const { settings } = useSettings();
   const grabTable = (e, id) => {
     setDragging(id);
     setOffset({
@@ -190,23 +193,11 @@ export default function SimpleCanvas({ diagram, zoom }) {
       onMouseLeave={releaseTable}
     >
       <defs>
-        <pattern
-          id="pattern-circles"
-          x="0"
-          y="0"
-          width="22"
-          height="22"
-          patternUnits="userSpaceOnUse"
-          patternContentUnits="userSpaceOnUse"
-        >
-          <circle
-            id="pattern-circle"
-            cx="4"
-            cy="4"
-            r="0.85"
-            fill="rgb(99, 152, 191)"
-          ></circle>
-        </pattern>
+        {
+          settings.variant === 'cross' ?
+            <CrossPattern/> :
+            <DotsPattern />
+        }
       </defs>
       <rect
         x="0"
